@@ -1,0 +1,353 @@
+*, *::before, *::after{
+	box-sizing: border-box;
+}
+// 通用样式
+@width: 100%;
+@height: @width;
+div{
+	box-sizing: content-box;
+}
+i{
+	font-style: normal;
+	transition: all 0.3s;
+}
+a {
+	color: #1890ff;
+	text-decoration: none;
+	background-color: rgba(0,0,0,0);
+	outline: none;
+	cursor: pointer;
+	-webkit-transition: color .3s;
+	transition: color .3s;
+	-webkit-text-decoration-skip: objects;
+}
+a:hover {
+	color: #40a9ff;
+}
+ul{
+	margin: 0;
+}
+li{
+	list-style: none;
+}
+.icon{
+	cursor: pointer;
+	display: inline-block;
+	background: url(../../src/assets/icon/icon.png) no-repeat;
+	width: 34px;
+	height: 34px;
+	&.icon-exit {
+		width: 36px;
+		height: 36px;
+		background-position: 0px 0px;
+		margin-right: 10px;
+	}
+	&.icon-book{
+		width: 40px;
+		height: 40px;
+		background-position: -0px -128px;
+	}
+	&.icon-desktop{
+		width: 24px;
+		height: 24px;
+		background-position: 0px -45px;
+		margin-right: 10px;
+	}
+	&.icon-application{
+		width: 24px;
+		height: 24px;
+		background-position: -32px -45px;
+		margin-right: 10px;
+	}
+	&.icon-text{
+		width: 18px;
+		height: 18px;
+		background-position: -25px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-describe{
+		width: 18px;
+		height: 18px;
+		background-position: -51px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-num{
+		width: 18px;
+		height: 18px;
+		background-position: -77px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-choice{
+		width: 18px;
+		height: 18px;
+		background-position: -103px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-data{
+		width: 18px;
+		height: 18px;
+		background-position: -155px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-caption{
+		width: 18px;
+		height: 18px;
+		background-position: -181px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-list{
+		width: 18px;
+		height: 18px;
+		background-position: -207px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-money{
+		width: 18px;
+		height: 18px;
+		background-position: -233px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-ensconce{
+		width: 18px;
+		height: 18px;
+		background-position: -259px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-site{
+		width: 18px;
+		height: 18px;
+		background-position: -285px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-file{
+		width: 18px;
+		height: 18px;
+		background-position: -311px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-bringback{
+		width: 18px;
+		height: 18px;
+		background-position: -337px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-association{
+		width: 18px;
+		height: 18px;
+		background-position: -363px -227px;
+		position: absolute;
+		left: 3px;
+		top: 10px;
+	}
+	&.icon-draggable{
+		width: 18px;
+		height: 18px;
+		background-position: -416px -227px;
+		margin-right: 10px;
+	}
+	// 应用图标
+	&.icon-project{
+		width: 40px;
+		height: 40px;
+		background-position: 0 -128px;
+	}
+	&.icon-means{
+		width: 40px;
+		height: 40px;
+		background-position: -50px -128px;
+	}
+	&.icon-purchase{
+		width: 40px;
+		height: 40px;
+		background-position: -100px -128px;
+	}
+	&.icon-personnel{
+		width: 40px;
+		height: 40px;
+		background-position: -150px -128px;
+	}
+	&.icon-moneylist{
+		width: 40px;
+		height: 40px;
+		background-position: -200px -128px;
+	}
+	&.icon-construction{
+		width: 40px;
+		height: 40px;
+		background-position: -250px -128px;
+	}
+	&.icon-right{
+		width: 40px;
+		height: 40px;
+		background-position: -300px -128px;
+	}
+	&.icon-coin{
+		width: 40px;
+		height: 40px;
+		background-position: -350px -128px;
+	}
+	&.icon-q{
+		width: 40px;
+		height: 40px;
+		background-position: -400px -128px;
+	}
+	&.icon-architecture{
+		width: 40px;
+		height: 40px;
+		background-position: -450px -128px;
+	}
+	&.icon-time{
+		width: 40px;
+		height: 40px;
+		background-position: -500px -128px;
+	}
+	&.icon-notice{
+		width: 40px;
+		height: 40px;
+		background-position: -550px -128px;
+	}
+	&.icon-badge{
+		width: 40px;
+		height: 40px;
+		background-position: -600px -128px;
+	}
+	&.icon-maintain{
+		width: 40px;
+		height: 40px;
+		background-position: -650px -128px;
+	}
+	&.icon-register{
+		width: 40px;
+		height: 40px;
+		background-position: -700px -128px;
+	}
+	&.icon-pen{
+		width: 40px;
+		height: 40px;
+		background-position: -750px -128px;
+	}
+	&.icon-pass{
+		width: 40px;
+		height: 40px;
+		background-position: -800px -128px;
+	}
+	&.icon-stamp{
+		width: 40px;
+		height: 40px;
+		background-position: -850px -128px;
+	}
+	&.icon-tally{
+		width: 40px;
+		height: 40px;
+		background-position: -900px -128px;
+	}
+	&.icon-materials{
+		width: 40px;
+		height: 40px;
+		background-position: -0px -178px;
+	}
+	&.icon-menu{
+		width: 40px;
+		height: 40px;
+		background-position: -50px -178px;
+	}
+	&.icon-procurement {
+		width: 40px;
+		height: 40px;
+		background-position: -100px -178px;
+	}
+	&.icon-shopping {
+		width: 40px;
+		height: 40px;
+		background-position: -150px -178px;
+	}
+	&.icon-exchange {
+		width: 40px;
+		height: 40px;
+		background-position: -200px -178px;
+	}
+	&.icon-people {
+		width: 40px;
+		height: 40px;
+		background-position: -250px -178px;
+	}
+	&.icon-doctor {
+		width: 40px;
+		height: 40px;
+		background-position: -300px -178px;
+	}
+	&.icon-record {
+		width: 40px;
+		height: 40px;
+		background-position: -350px -178px;
+	}
+	&.icon-pack {
+		width: 40px;
+		height: 40px;
+		background-position: -400px -178px;
+	}
+	&.icon-nail {
+		width: 40px;
+		height: 40px;
+		background-position: -450px -178px;
+	}
+	&.icon-tag {
+		width: 40px;
+		height: 40px;
+		background-position: -500px -178px;
+	}
+	&.icon-pape {
+		width: 40px;
+		height: 40px;
+		background-position: -550px -178px;
+	}
+	&.icon-rw {
+		width: 40px;
+		height: 40px;
+		background-position: -600px -178px;
+	}
+	&.icon-calendar {
+		width: 40px;
+		height: 40px;
+		background-position: -650px -178px;
+	}
+	&.icon-timeplan {
+		width: 40px;
+		height: 40px;
+		background-position: -700px -178px;
+	}
+	&.icon-card {
+		width: 40px;
+		height: 40px;
+		background-position: -750px -178px;
+	}
+	&.icon-tower {
+		width: 40px;
+		height: 40px;
+		background-position: -800px -178px;
+	}
+}

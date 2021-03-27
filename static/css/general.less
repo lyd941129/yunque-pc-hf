@@ -1,0 +1,589 @@
+*, *::before, *::after{
+	box-sizing: border-box;
+}
+// 通用样式
+@width: 100%;
+@height: @width;
+div{
+	box-sizing: content-box;
+}
+i{
+	font-style: normal;
+}
+a {
+	color: #1890ff;
+	text-decoration: none;
+	background-color: rgba(0,0,0,0);
+	outline: none;
+	cursor: pointer;
+	-webkit-transition: color .3s;
+	transition: color .3s;
+	-webkit-text-decoration-skip: objects;
+}
+a:hover {
+	color: #40a9ff;
+}
+ul{
+	margin: 0;
+}
+li{
+	list-style: none;
+}
+.input{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0;
+	font-variant: tabular-nums;
+	list-style: none;
+	-webkit-font-feature-settings: "tnum";
+	font-feature-settings: "tnum";
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	height: 32px;
+	padding: 4px 11px;
+	color: rgba(0,0,0,.65);
+	font-size: 14px;
+	line-height: 1.5;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #d9d9d9;
+	border-radius: 4px;
+	-webkit-transition: all .3s;
+	transition: all .3s;
+}
+.input:focus, .input:hover {
+	border-color: #40a9ff;
+	border-right-width: 1px!important;
+}
+.input:focus {
+	outline: 0;
+	-webkit-box-shadow: 0 0 0 2px rgba(24,144,255,.2);
+	box-shadow: 0 0 0 2px rgba(24,144,255,.2);
+}
+.input.input-small{
+	width: 174px;
+	height: 22px;
+	padding: 2px;
+}
+.border-none{
+	border: 0 !important;
+}
+// 按钮
+.btn{
+	border-radius: 16px !important;
+	line-height: 1.5;
+	position: relative;
+	display: inline-block;
+	font-weight: 400;
+	white-space: nowrap;
+	text-align: center;
+	background-image: none;
+	-webkit-box-shadow: 0 2px 0 rgba(0,0,0,.015);
+	box-shadow: 0 2px 0 rgba(0,0,0,.015);
+	cursor: pointer;
+	-webkit-transition: all .3s cubic-bezier(.645,.045,.355,1);
+	transition: all .3s cubic-bezier(.645,.045,.355,1);
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	height: 32px;
+	padding: 0 15px;
+	font-size: 14px;
+	border-radius: 4px;
+	color: rgba(0,0,0,.65);
+	background-color: #fff;
+	border: 1px solid #d9d9d9;
+}
+.btn-primary {
+	color: #fff;
+	background-color: #1890ff;
+	border-color: #1890ff;
+	text-shadow: 0 -1px 0 rgba(0,0,0,.12);
+	-webkit-box-shadow: 0 2px 0 rgba(0,0,0,.045);
+	box-shadow: 0 2px 0 rgba(0,0,0,.045);
+}
+.btn:hover{
+	color: #40a9ff;
+	background-color: #fff;
+	border-color: #40a9ff;
+}
+.btn-primary:hover{
+	color: #fff;
+	background-color: #40a9ff;
+	border-color: #40a9ff;
+}
+.btn:focus{
+	outline: 0; 
+}
+// 选项
+.tabpanel-wrapper{
+	font-size: 14px;
+	line-height: 22px;
+	width: 30%;
+	color: #191F25;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	box-sizing: border-box;
+	padding: 0;
+	color: rgba(0,0,0,.65);
+	font-size: 14px;
+	font-variant: tabular-nums;
+	line-height: 1.5;
+	list-style: none;
+	-webkit-font-feature-settings: "tnum";
+	font-feature-settings: "tnum";
+	position: relative;
+	display: inline-block;
+	white-space: nowrap;
+	cursor: pointer;
+	margin: 0 8px 16px 0;
+	.tabpanel-radio{
+		margin: 0;
+		line-height: 1;
+		vertical-align: sub;
+		outline: none;
+		box-sizing: border-box;
+		padding: 0;
+		color: rgba(0,0,0,.65);
+		font-size: 14px;
+		font-variant: tabular-nums;
+		line-height: 1.5;
+		list-style: none;
+		-webkit-font-feature-settings: "tnum";
+		font-feature-settings: "tnum";
+		position: relative;
+		display: inline-block;
+		white-space: nowrap;
+		cursor: pointer;
+		.tabpanel-radio-input{
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 1;
+			cursor: pointer;
+			opacity: 0;
+		}
+		.tabpanel-radio-inner{
+			position: relative;
+			top: 0;
+			left: 0;
+			display: block;
+			width: 16px;
+			height: 16px;
+			background-color: #fff;
+			border: 1px solid #d9d9d9;
+			border-radius: 100px;
+			-webkit-transition: all .3s;
+			transition: all .3s;
+		}
+		.tabpanel-radio-inner:after{
+			position: absolute;
+			top: 3px;
+			left: 3px;
+			display: table;
+			width: 8px;
+			height: 8px;
+			background-color: #1890ff;
+			border-top: 0;
+			border-left: 0;
+			border-radius: 8px;
+			-webkit-transform: scale(0);
+			-ms-transform: scale(0);
+			transform: scale(0);
+			opacity: 0;
+			-webkit-transition: all .3s cubic-bezier(.78,.14,.15,.86);
+			transition: all .3s cubic-bezier(.78,.14,.15,.86);
+			content: " ";
+		}
+	}
+	.tabpanel-radio.radio-checked{
+		.tabpanel-radio-inner{
+			border-color: #1890ff;
+		}
+		.tabpanel-radio-inner:after {
+			-webkit-transform: scale(1);
+			-ms-transform: scale(1);
+			transform: scale(1);
+			opacity: 1;
+			-webkit-transition: all .3s cubic-bezier(.78,.14,.15,.86);
+			transition: all .3s cubic-bezier(.78,.14,.15,.86);
+		}
+	}
+	.tabpanel-radio.radio-checked::after{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 1px solid #1890ff;
+		border-radius: 50%;
+		visibility: hidden;
+		-webkit-animation: antRadioEffect .36s ease-in-out;
+		animation: antRadioEffect .36s ease-in-out;
+		-webkit-animation-fill-mode: both;
+		animation-fill-mode: both;
+		content: "";
+	}
+	span.tabpanel-radio+*{
+		padding-right: 8px;
+		padding-left: 8px;
+	}
+	.tabpanel-radio:hover{
+		.tabpanel-radio-inner{
+			border-color: #1890ff;
+		}
+	}
+}
+.tabpanel-wrapper.w-100{
+	width: 100%;
+}
+.tabpanel-wrapper-checked{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	color: rgba(0,0,0,.65);
+	font-size: 14px;
+	font-variant: tabular-nums;
+	line-height: 1.5;
+	list-style: none;
+	-webkit-font-feature-settings: "tnum";
+	font-feature-settings: "tnum";
+	display: inline-block;
+	line-height: unset;
+	cursor: pointer;
+	.tabpanel-checkbox{
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		color: rgba(0,0,0,.65);
+		font-size: 14px;
+		font-variant: tabular-nums;
+		line-height: 1.5;
+		list-style: none;
+		-webkit-font-feature-settings: "tnum";
+		font-feature-settings: "tnum";
+		position: relative;
+		top: -.09em;
+		display: inline-block;
+		line-height: 1;
+		white-space: nowrap;
+		vertical-align: middle;
+		outline: none;
+		cursor: pointer;
+		.checkbox-input{
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 1;
+			width: 100%;
+			height: 100%;
+			cursor: pointer;
+			opacity: 0;
+		}
+		.checkbox-inner{
+			position: relative;
+			top: 0;
+			left: 0;
+			display: block;
+			width: 16px;
+			height: 16px;
+			background-color: #fff;
+			border: 1px solid #d9d9d9;
+			border-radius: 2px;
+			border-collapse: separate;
+			-webkit-transition: all .3s;
+			transition: all .3s;
+		}
+		.checkbox-inner:after{
+			position: absolute;
+			top: 50%;
+			left: 22%;
+			display: table;
+			width: 3px;
+			height: 7px;
+			border: 2px solid #fff;
+			border-top: 0;
+			border-left: 0;
+			-webkit-transform: rotate(45deg) scale(1) translate(-50%,-50%);
+			-ms-transform: rotate(45deg) scale(1) translate(-50%,-50%);
+			transform: rotate(45deg) scale(1) translate(-50%,-50%);
+			opacity: 1;
+			-webkit-transition: all .1s cubic-bezier(.71,-.46,.88,.6),opacity .1s;
+			transition: all .1s cubic-bezier(.71,-.46,.88,.6),opacity .1s;
+			content: " ";
+		}
+	}
+	.tabpanel-checkbox.checkbox-checked{
+		.checkbox-inner{
+			background-color: #1890ff;
+			border-color: #1890ff;
+		}
+	}
+	.checkbox-checked:after {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 1px solid #1890ff;
+		border-radius: 2px;
+		visibility: hidden;
+		-webkit-animation: antCheckboxEffect .36s ease-in-out;
+		animation: antCheckboxEffect .36s ease-in-out;
+		-webkit-animation-fill-mode: backwards;
+		animation-fill-mode: backwards;
+		content: "";
+	}
+	span.tabpanel-checkbox+*{
+		padding-right: 8px;
+		padding-left: 8px;
+	}
+}
+// 动画
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
+}
+.property-enter-active, .property-leave-active {
+	transition: all .3s;
+}
+.property-enter,.property-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	transform: translateX(550px);
+}
+.property-enter-to, .property-leave{
+	transform: translateX(0);
+}
+.icon{
+	cursor: pointer;
+}
+// 图标
+.icon {
+	display: inline-block;
+	background: url(../../src/assets/icon/iconWhite.png) no-repeat;
+	width: 34px;
+	height: 34px;
+	&.icon-exit {
+		width: 36px;
+		height: 36px;
+		background-position: 0px -70px;
+		margin-right: 20px;
+	}
+	&.icon-add-approver{
+		background-position: 0px -184px;
+	}
+	&.icon-add-notifier{
+		background-position: -44px -184px;
+	}
+	&.icon-add-route{
+		background-position: -88px -184px;
+	}
+	&.icon-arrow{
+		background-position: 5px -161px;
+	}
+	&.icon-approver{
+		background-position: -131px -136px;
+		width: 16px;
+		height: 16px;
+		position: absolute;
+		left: 8px;
+		top: 3px;
+	}
+	&.icon-notifier{
+		background-position: -156px -136px;
+		width: 16px;
+		height: 16px;
+		position: absolute;
+		left: 8px;
+		top: 3px;
+	}
+	&.icon-start{
+		background-position: -103px -136px;
+		width: 16px;
+		height: 16px;
+		position: absolute;
+		left: 8px;
+		top: 3px;
+	}
+	&.icon-people{
+		width: 60px;
+		height: 60px;
+		background-position: -560px -0px;
+	}
+	&.icon-dep{
+		width: 60px;
+		height: 60px;
+		background-position: -630px -0px;
+	}
+	&.icon-role{
+		width: 60px;
+		height: 60px;
+		background-position: -700px -0px;
+	}
+	&.icon-statistics{
+		width: 60px;
+		height: 60px;
+		background-position: -770px -0px;
+	}
+	&.icon-operation{
+		width: 60px;
+		height: 60px;
+		background-position: -840px -0px;
+	}
+	&.icon-expenditure{
+		width: 60px;
+		height: 60px;
+		background-position: -910px -0px;
+	}
+	&.icon-indent{
+		width: 60px;
+		height: 60px;
+		background-position: -980px -0px;
+	}
+	&.icon-book{
+		width: 40px;
+		height: 40px;
+		background-position: -0px -334px;
+	}
+	&.icon-books{
+		width: 40px;
+		height: 40px;
+		background-position: -50px -334px;
+	}
+	&.icon-shop{
+		width: 40px;
+		height: 40px;
+		background-position: -100px -334px;
+	}
+	&.icon-address{
+		width: 40px;
+		height: 40px;
+		background-position: -150px -334px;
+	}
+	&.icon-bill{
+		width: 40px;
+		height: 40px;
+		background-position: -200px -334px;
+	}
+	&.icon-build{
+		width: 40px;
+		height: 40px;
+		background-position: -250px -334px;
+	}
+	&.icon-quit{
+		width: 40px;
+		height: 40px;
+		background-position: -300px -334px;
+	}
+	&.icon-money{
+		width: 40px;
+		height: 40px;
+		background-position: -350px -334px;
+	}
+	&.icon-Q{
+		width: 40px;
+		height: 40px;
+		background-position: -400px -334px;
+	}
+	&.icon-mountain{
+		width: 40px;
+		height: 40px;
+		background-position: -450px -334px;
+	}
+	&.icon-time{
+		width: 40px;
+		height: 40px;
+		background-position: -500px -334px;
+	}
+	&.icon-warn{
+		width: 40px;
+		height: 40px;
+		background-position: -550px -334px;
+	}
+	&.icon-medal{
+		width: 40px;
+		height: 40px;
+		background-position: -600px -334px;
+	}
+	&.icon-service{
+		width: 40px;
+		height: 40px;
+		background-position: -650px -334px;
+	}
+	&.icon-record{
+		width: 40px;
+		height: 40px;
+		background-position: -700px -334px;
+	}
+	&.icon-pen{
+		width: 40px;
+		height: 40px;
+		background-position: -750px -334px;
+	}
+	&.icon-correct{
+		width: 40px;
+		height: 40px;
+		background-position: -800px -334px;
+	}
+	&.icon-chapter{
+		width: 40px;
+		height: 40px;
+		background-position: -850px -334px;
+	}
+	&.icon-consume{
+		width: 40px;
+		height: 40px;
+		background-position: -900px -334px;
+	}
+	&.icon-person{
+		width: 40px;
+		height: 40px;
+		background-position: -950px -334px;
+	}
+	&.icon-shopping{
+		width: 40px;
+		height: 40px;
+		background-position: -1000px -334px;
+	}
+	&.icon-goback{
+		width: 40px;
+		height: 40px;
+		background-position: -1050px -334px;
+	}
+	&.icon-personnel{
+		width: 40px;
+		height: 40px;
+		background-position: -1100px -334px;
+	}
+	&.icon-graduate{
+		width: 40px;
+		height: 40px;
+		background-position: -1150px -334px;
+	}
+	&.icon-staff{
+		width: 40px;
+		height: 40px;
+		background-position: -1200px -334px;
+	}
+	&.icon-materials{
+		width: 40px;
+		height: 40px;
+		background-position: -0px -384px;
+	}
+	&.icon-menu{
+		width: 40px;
+		height: 40px;
+		background-position: -50px -384px;
+	}
+	
+}
