@@ -27,6 +27,7 @@
 					name: '1',
 					type: 'management'
 				}, ],
+				addNum: '2',
 			}
 		},
 		methods: {
@@ -41,12 +42,13 @@
 				}
 				that.editableTabs.push({
 					title: objData.app_name,
-					name: that.editableTabs.length + 1 + '',
+					name: that.addNum + '',
 					type: type,
 					id: objData.id,
 					lengthNum: that.editableTabs.length
 				});
-				that.editableTabsValue = that.editableTabs.length + '';
+				that.editableTabsValue = that.addNum + '';
+				that.addNum = ++that.addNum;
 			},
 			removeTab(targetName) {// 移除页签
 				let tabs = this.editableTabs;
