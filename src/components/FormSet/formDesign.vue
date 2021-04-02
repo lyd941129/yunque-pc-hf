@@ -42,8 +42,9 @@
 			</div>
 		</div>
 		<div class="property">
+			<div class="component-type" v-if="selectIndex != -1 && formDesignData[selectIndex]">[{{selectIndex != -1 ? titleText[formDesignData[selectIndex].element] : ''}}]</div>
 			<property ref="property" :editData="isListEdit ? (selectId == -1 ? {} : listEditData) : (selectId == -1 ? {} : formDesignData[selectIndex])"
-			:targetOption="targetOption" :associatedComponents.sync="associatedComponents" :formDesignData.sync="formDesignData" :isListEdit="isListEdit" :listIndex="listIndex"
+			:targetOption="targetOption" :codeOption="codeOption" :associatedComponents.sync="associatedComponents" :formDesignData.sync="formDesignData" :isListEdit="isListEdit" :listIndex="listIndex"
 			:deepClone="deepClone" :createid="createid" :createCode="createCode" :judge="judge"
 			:originOption="originOption"></property>
 		</div>
@@ -179,8 +180,29 @@
 						title: '表单关联',
 						id: '13',
 						icon: 'icon icon-association'
+					},{
+						element: 'Think',
+						title: '联想组件',
+						id: '14',
+						icon: 'icon icon-association'
 					},
 				],
+				titleText: {
+					'Textbox': '单行输入框',
+					'Describe': '多行输入框',
+					'Num': '数字输入框',
+					'Choice': '选择组件',
+					'Data': '日期组件',
+					'Caption': '标题组件',
+					'List': '列表组件',
+					'Money': '货币',
+					'Ensconce': '隐藏',
+					'Site': '地址',
+					'File': '文件上传',
+					'Bringback': '选择带回',
+					'Association': '表单关联',
+					'Think': '联想组件',
+				},
 				formDesignData: [],
 				selectId: -1,
 				selectIndex: -1,
@@ -189,6 +211,7 @@
 				loadingBtn: false,
 				loading: false,
 				targetOption: [],
+				codeOption: [],
 				originOption: null,
 				listIndex: -1,
 				judge: true,
@@ -227,10 +250,13 @@
 				// 这个是用于判断拖动的是否是表哥与非表格之间，是则不需要重新创建数据END
 				let obj = this.deepClone(componentData[this.formDesignData[e.newDraggableIndex].element]);
 				obj.id = this.createid();
+				this.$set(this, 'judge', true);
 				this.$set(this, 'selectId', obj.id);
 				this.$set(this, 'selectIndex', e.newDraggableIndex);
 				this.$set(this.formDesignData, e.newDraggableIndex, obj);
 				this.$set(this, 'isListEdit', false);
+				obj.element === 'Choice' && (this.postCode());
+				obj.element === 'Think' && (this.postTarget('think'));
 				obj.element === 'Association' && (this.postTarget());
 				obj.element === 'Textbox' && (this.postOrigin());
 				obj.element === 'Bringback' && (this.getBringback());
@@ -272,9 +298,12 @@
 				return code;
 			},
 			openEdit(e, i){// 编辑组件
+				e.element === 'Choice' && (this.postCode());
+				e.element === 'Think' && (this.postTarget('think'));
 				e.element === 'Association' && (this.postTarget());
 				e.element === 'Textbox' && (this.postOrigin());
 				e.element === 'Bringback' && (this.getBringback(e));
+				this.$set(this, 'judge', true);
 				this.$set(this, 'selectId', e.id);
 				this.$set(this, 'isListEdit', false);
 				this.$set(this, 'selectIndex', i);
@@ -289,6 +318,7 @@
 				}
 				// console.log(postObj);
 				// console.log(JSON.stringify(postObj));
+				// return
 				that.loadingBtn = true;
 				Network.post('/admin/form/designSave', postObj).then(data => {
 					that.$message({
@@ -302,21 +332,41 @@
 					that.loadingBtn = false;
 				});
 			},
-			postTarget(){// 对关联应用数据进行请求
+			postTarget(type){// 对关联应用数据进行请求
 				let that = this;
-				let postObj = {
-					uid: that.loginData.user_info.id,
+				switch(type){
+					case "think":
+						// 联想组件
+						Network.get('/admin/form/relation').then(datas => {
+							that.$set(that, 'targetOption', datas.data);
+						}).catch(msg => {
+							that.$message.error(msg);
+						});
+						break;
+					default:
+						// 表单关联
+						let postObj = {
+							uid: that.loginData.user_info.id,
+						}
+						Network.post('/admin/form/appName', postObj).then(datas => {
+							that.$set(that, 'targetOption', datas.data);
+						}).catch(msg => {
+							that.$message.error(msg);
+						});
 				}
-				Network.post('/admin/form/appName', postObj).then(datas => {
-					that.$set(that, 'targetOption', datas.data);
-				}).catch(msg => {
-					that.$message.error(msg);
-				});
 			},
 			postOrigin(){// 对数据源数据进行请求
 				let that = this;
 				Network.post('/admin/form/source').then(datas => {
 					that.$set(that, 'originOption', datas.data);
+				}).catch(msg => {
+					that.$message.error(msg);
+				});
+			},
+			postCode(){// 对基础数据参数进行请求
+				let that = this;
+				Network.get('/admin/code/dict').then(datas => {
+					that.$set(that, 'codeOption', datas.data);
 				}).catch(msg => {
 					that.$message.error(msg);
 				});
@@ -465,6 +515,13 @@
 			flex: 1;
 			max-width: 304px;
 			border-left: 1px solid rgba(235, 235, 235, 1);
+			position: relative;
+			.component-type{
+				position: absolute;
+				right: 15px;
+				top: 10px;
+				color: #1890ff;
+			}
 		}
 	}
 </style>

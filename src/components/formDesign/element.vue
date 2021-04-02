@@ -2,7 +2,7 @@
 <template>
 	<div class="element" :class="[{'element-list': (information.element === 'List')}, {'active': (selectId == information.id)}]" @click.stop="openEdit(information, parentIndex)">
 		<i class="icon icon-ensconce" v-if="information.isHidden"></i>
-		<div class="operation" :class="{'active': (selectId == information.id)}">
+		<div class="operation" :class="{'active': (selectId == information.id) && !(information.element == 'Textbox' && information.relevanceId)}">
 			<el-tooltip v-if="information.element != 'List'" effect="dark" content="复制" placement="bottom">
 				<i class="el-icon-document-copy" @click.stop="copyElement"></i>
 			</el-tooltip>
@@ -12,55 +12,55 @@
 			</el-tooltip>
 		</div>
 		<div class="box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Textbox'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip">{{information.value ? information.value : information.prompt}}</div>
 		</div>
 		<div class="box caption-box" v-if="information.element === 'Caption'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 		</div>
 		<div class="box describe-box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Describe'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip">{{information.value ? information.value : information.prompt}}</div>
 		</div>
 		<div class="box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Num'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip">{{information.value ? information.value : information.prompt}}</div>
 		</div>
-		<div class="box choice-box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Choice' || information.element === 'Data' || information.element === 'Association' || information.element === 'Bringback'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+		<div class="box choice-box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Choice' || information.element === 'Data' || information.element === 'Association' || information.element === 'Bringback' || information.element === 'Think'">
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip"><div>{{information.value ? information.value : information.prompt}}</div><i class="el-icon-arrow-right"></i></div>
-			<div class="relevance-box" v-if="information.relevance">
+			<div class="relevance-box" v-if="information.relevance && information.element !== 'Think'">
 				<div class="relevance-item" v-for="(item, index) in information.relevance" :key="index">{{item.field_name || item.tit}}</div>
 			</div>
 		</div>
 		<div class="box" v-if="information.element === 'Money'" :class="{'box-isRequired': information.isRequired == '1'}">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip">{{information.prompt}}</div>
 			<div class="capital" v-if="information.rmb">大写</div>
 		</div>
 		<div class="box ensconce-box" v-if="information.element === 'Ensconce'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip">这是一个隐藏组件，无需修改</div>
 		</div>
 		<div class="box file-box" v-if="information.element === 'File'" :class="{'box-isRequired': information.isRequired == '1'}">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip">+</div>
 		</div>
 		<div class="box site-box" v-if="information.element === 'Site'" :class="{'box-isRequired': information.isRequired == '1'}">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
-			<div class="tip tip-choce"><div>请输选择</div><i class="el-icon-arrow-right"></i></div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
+			<div class="tip tip-choce"><div>请选择</div><i class="el-icon-arrow-right"></i></div>
 			<div class="title" :class="{'no-write': information.status == '0'}">详细地址</div>
 			<div class="tip">请输入...</div>
 		</div>
 		<div class="box list-box" v-if="information.element === 'List'">
-			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}</div>
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="phone-within" v-if="information.listData" :class="{'phone-within-no': (information.listData.header.length == 0)}">
 				<draggable v-model="information.listData.header" group="site" animation="300" @add='addFun' ghostClass="ghost" @end="endRight" :move="moveRight">
 					<transition-group>
 						<subassemblyElement v-for="(item, index) in information.listData.header" :key="item.id" :information="item" :openEdit="openEditList"
 						:addFun="addFun" :deepClone="deepClone" :createid="createid" :createCode="createCode" :selectId.sync="selectIdChild"
 						:parentData.sync="information.listData.header" :parentIndex="index"
-						:postTarget="postTarget" :judge.sync="judgeChild" :getBringback="getBringback"></subassemblyElement>
+						:postTarget="postTarget" :postCode="postCode" :judge.sync="judgeChild" :getBringback="getBringback"></subassemblyElement>
 					</transition-group>
 				</draggable>
 			</div>
@@ -92,6 +92,7 @@
 			listEditData: {},
 			isListEdit:{},
 			postTarget:{},
+			postCode:{},
 			judge: {},
 			getBringback: {},
 		},
@@ -131,6 +132,10 @@
 					this.postTarget();
 				}else if(e.element === "Bringback"){
 					this.getBringback(e);
+				}else if(e.element === "Think"){
+					this.postTarget('think');
+				}else if(e.element === "Choice"){
+					this.postCode();
 				}
 				this.$emit('update:listEditData', e);
 				this.$emit('update:isListEdit', true);
@@ -144,13 +149,29 @@
 				this.parentData.push(obj);
 				(obj.relevance && obj.relevance.length) && obj.relevance.map((item) => {// 此操作是为了赋值过程中有关系数据则需要在父级数据加入相关数据
 					item.id = that.createid();
-					that.parentData.push({
-						element: "Binding",
-						id: item.id || item.field_sign,
-						title: item.tit || item.field_name,
-						value: "",
-						relevanceId: obj.id,
-					});
+					switch(obj.element){
+						case "Think":
+							that.parentData.push({
+								element: "Textbox",
+								id: item.id || item.field_sign,
+								title: item.tit || item.field_name,
+								value: "",
+								relevanceId: obj.id,
+								prompt: '请输入...',// 提示语
+								status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
+								isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+								isHidden: false,// 是否隐藏
+							});
+							break;
+						default:
+							that.parentData.push({
+								element: "Binding",
+								id: item.id || item.field_sign,
+								title: item.tit || item.field_name,
+								value: "",
+								relevanceId: obj.id,
+							});
+					}
 				});
 				this.$emit('update:parentData', this.parentData);
 			},
@@ -159,7 +180,7 @@
 				// 当删除关联表单组件要将关系里绑定的组件也去掉，不然数据会错乱
 				(itself.relevance && itself.relevance.length) && itself.relevance.map((item) => {
 					that.parentData.map((f_item, f_index) => {
-						if(f_item.element === "Binding" && f_item.relevanceId == itself.id && item.id == f_item.id){
+						if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == itself.id && item.id == f_item.id){
 							that.parentData.splice(f_index, 1);
 						}
 					});
@@ -230,6 +251,9 @@
 		.box{
 			padding: 16px;
 			position: relative;
+			.el-icon-question{
+				margin-left: 5px;
+			}
 			.title{
 				color: rgba(51, 51, 51, 1);
 				font-size: 16px;

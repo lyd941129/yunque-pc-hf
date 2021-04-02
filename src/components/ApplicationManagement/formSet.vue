@@ -572,6 +572,10 @@
 		.el-dialog__body {
 			padding: 0;
 			height: calc(100% - 44px);
+			 -webkit-user-select: none;
+			-moz-user-select: none;
+			-o-user-select: none;
+			user-select: none;
 		}
 	}
 	.dialog-design-js{

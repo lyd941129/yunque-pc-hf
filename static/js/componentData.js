@@ -3,7 +3,8 @@ export default {
 	Caption: {
 		element: 'Caption',// 标题组件
 		title: '标题组件',// 组件名称
-		id: '1'// 组件标识
+		id: '1',// 组件标识
+		paralanguage: '',// 问号里面显示的内容
 	},
 	Textbox: {
 		element: 'Textbox',// 文本组件
@@ -11,6 +12,7 @@ export default {
 		prompt: '请输入...',// 提示语
 		value: '',// 组件值
 		isSource: '',// 数据来源
+		paralanguage: '',// 问号里面显示的内容
 		fromId: '',// 来源id
 		status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
 		id: '2',// 组件标识
@@ -23,6 +25,7 @@ export default {
 		prompt: '请输入...',// 提示语
 		value: '',
 		unit: '￥',// 金额单位
+		paralanguage: '',// 问号里面显示的内容
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		id: '4',// 组件标识
@@ -34,6 +37,7 @@ export default {
 		element: 'Num',// 数字组件
 		title: '数字输入框',
 		prompt: '请输入...',// 提示语
+		paralanguage: '',// 问号里面显示的内容
 		value: '',
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
@@ -46,6 +50,7 @@ export default {
 		prompt: '请输入...',// 提示语
 		value: '',
 		maxNum: '50',// 限制输入的最大值
+		paralanguage: '',// 问号里面显示的内容
 		status: '1',
 		id: '6',// 组件标识
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
@@ -55,6 +60,7 @@ export default {
 		element: 'Choice',// 选择组件(单选)
 		title: '选择组件',
 		prompt: '请选择...',// 提示语
+		paralanguage: '',// 问号里面显示的内容
 		isDict: false,
 		option: ['选项一', '选项二'], // 组件打开选择页面的数据
 		value: '',// 如果type为multiple，则为多选，值是数组：['中国', '美国']
@@ -69,6 +75,7 @@ export default {
 		element: 'Data',// 时间组件
 		title: '日期组件',
 		prompt: '请选择...',// 提示语
+		paralanguage: '',// 问号里面显示的内容
 		dataType: 'time',// date：年月日；time：时分秒；
 		value: '',// 如果为日期，则value为2020-8-12
 		status: '1',
@@ -81,6 +88,7 @@ export default {
 		element: 'Association',// 表单关联组件
 		title: '表单关联',
 		prompt: '请选择...',// 提示语
+		paralanguage: '',// 问号里面显示的内容
 		id: 'lh1WGWXfyW',
 		target: '',
 		relevance: [],
@@ -89,10 +97,13 @@ export default {
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		isHidden: false,// 是否隐藏
 	},
-	Bringback: {// 表单关联组件数据
-		element: 'Bringback',// 表单关联组件
+	Bringback: {// 选择带回组件数据
+		element: 'Bringback',// 选择带回组件
 		title: '选择带回',
 		prompt: '请选择...',// 提示语
+		isSource: '',// 数据来源
+		paralanguage: '',// 问号里面显示的内容
+		fromId: '',// 来源id
 		id: 'lh1WGWXfyW',
 		target: '',
 		relevance: [],
@@ -104,6 +115,7 @@ export default {
 	File: {
 		element: 'File',// 上传文件组件
 		title: '文件上传',
+		paralanguage: '',// 问号里面显示的内容
 		id: '31',
 		limit: '10',// 上传个数限制
 		status: '1',
@@ -114,6 +126,7 @@ export default {
 	Site: {
 		element: 'Site',// 地址组件
 		title: '地址',
+		paralanguage: '',// 问号里面显示的内容
 		id: '33',
 		value: ['', '', '', ''],
 		status: '1',
@@ -125,6 +138,7 @@ export default {
 	List: {
 		element: 'List',// 明细表组件
 		title: '列表组件',
+		paralanguage: '',// 问号里面显示的内容
 		id: '33',
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
@@ -149,5 +163,18 @@ export default {
 		title: '项目名称',
 		value: "",
 		relevanceId: '11',// 关联表单的id
+	},
+	Think: {
+		element: "Think",// 被关系绑定组件，不做显示
+		id: '6',
+		title: '联想组件',
+		value: "",
+		prompt: '请选择...',// 提示语
+		paralanguage: '',// 问号里面显示的内容
+		target: '',
+		relevance: [],
+		status: '1',
+		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+		isHidden: false,// 是否隐藏
 	}
 };

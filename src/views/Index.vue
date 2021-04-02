@@ -30,7 +30,7 @@
 										<i class="icon icon-exit"></i>
 									</div>
 								</el-image>
-								{{loginData.user_info.username}}<i class="el-icon-arrow-down el-icon--right"></i>
+								{{loginData.user_info ? loginData.user_info.username : ''}}<i class="el-icon-arrow-down el-icon--right"></i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item>个人信息</el-dropdown-item>
@@ -55,10 +55,6 @@
 	export default {
 		created() {
 			// console.log(this.$store.state.loginData)
-			if(localStorage.getItem('tokenTime') == null){
-				this.$router.push('/log');
-			}
-			this.loginData = localStorage.getItem("loginData") ? JSON.parse(localStorage.getItem("loginData")) : {};
 		},
 		data(){
 			return{

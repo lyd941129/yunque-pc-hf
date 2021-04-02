@@ -320,7 +320,6 @@
 		-webkit-appearance: none;
 	}
 
-	//firefox要用如下代码才能实现隐藏
 	input[type="number"] {
 		-moz-appearance: textfield;
 	}

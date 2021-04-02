@@ -61,7 +61,11 @@
 				<el-radio :label="true">基础数据</el-radio>
 			</el-radio-group>
 			<!-- 基础数据参数值 -->
-			<el-input v-if="key === 'code' && editData.isDict" v-model="editData[key]" placeholder="请输入参数值"></el-input>
+			<!-- <el-input v-if="key === 'code' && editData.isDict" v-model="editData[key]" placeholder="请输入参数值"></el-input> -->
+			<el-select v-if="key === 'code' && editData.isDict" v-model="editData[key]" filterable placeholder="请选择" :no-data-text="optionTitle"
+			@change="seleChangeCode">
+				<el-option v-for="item in codeOption" :key="item.dict_type" :label="item.dict_name" :value="item.dict_type">{{item.dict_name}}</el-option>
+			</el-select>
 			<!-- 是否合计 -->
 			<el-switch v-if="key === 'is_total'" @change="switchChange($event, key)" :value="editData[key] == '1'" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 关联字段 -->
@@ -69,10 +73,6 @@
 				<div class="relevance-box" v-for="(item, index) in editData[key]" :key="index">
 					<div class="relevance-box-div">
 						<div style="width: 50%;">{{item.tit || item.field_name}}</div>
-						<!-- <el-select value-key="id" v-model="item.id" filterable placeholder="不绑定" size="mini">
-							<el-option v-for="des in formDesignData" v-if="des.element === 'Textbox'" :key="des.id" :label="des.title" :value="des.id"></el-option>
-						</el-select>
-						<el-button type="text">取消</el-button> -->
 					</div>
 					<i class="el-icon-remove-outline" @click="deleRelevance(index, item.id)"></i>
 				</div>
@@ -85,20 +85,31 @@
 				</el-checkbox-group>
 			</div>
 			<!-- 目标字段 -->
-			<el-select v-if="key === 'target' && editData.element != 'Bringback'" v-model="editData[key]" filterable placeholder="请选择" :no-data-text="optionTitle"
+			<el-select v-if="key === 'target' && editData.element != 'Bringback' && editData.element != 'Think'" v-model="editData[key]" filterable placeholder="请选择" :no-data-text="optionTitle"
 			@change="seleChange">
 				<el-option v-for="item in targetOption" :key="item.app_id" :label="item.app_name" :value="item.app_id">{{item.app_name}}</el-option>
+			</el-select>
+			<!-- 目标字段(联想组件) -->
+			<el-select v-if="key === 'target' && editData.element == 'Think'" v-model="editData[key]" filterable placeholder="请选择" :no-data-text="optionTitle"
+			@change="seleChange">
+				<el-option v-for="item in targetOption" :key="item.relation_id" :label="item.relation_name" :value="item.relation_id">{{item.relation_name}}</el-option>
 			</el-select>
 			<!-- 选择接口 -->
 			<el-select v-if="key === 'target' && editData.element == 'Bringback'" v-model="editData[key]" filterable placeholder="请选择" @change="seleChangeBack">
 				<el-option v-for="item in targetOption" :key="item.sign" :label="item.name" :value="item.sign">{{item.name}}</el-option>
 			</el-select>
+			<!-- 辅助语 -->
+			<el-input v-if="key === 'paralanguage'" type="textarea" autosize placeholder="请输入辅助内容" v-model="editData[key]"></el-input>
 		</div>
-		<!-- 弹框 -->
+		<!-- 关联字段弹框 -->
 		<el-dialog title="修改字段" :visible.sync="centerDialogVisibleDesign" append-to-body  v-loading="loadingDia">
 			<el-checkbox-group v-model="checkList">
 				<el-checkbox v-for="(item) in checkOption" :key="item.field_sign" :label="item.field_sign" :value="item.field_sign">{{item.field_name}}</el-checkbox>
 			</el-checkbox-group>
+			<h3 v-if="checkList.length && editData.element === 'Think'">入口</h3>
+			<el-radio-group v-model="radioList" v-if="checkList.length && editData.element === 'Think'">
+				<el-radio v-for="(item, index) in radioOption(checkOption, checkList)" :key="item.field_sign" :label="item.field_sign" :value="item.field_sign">{{item.field_name}}</el-radio>
+			</el-radio-group>
 			<span slot="footer" class="dialog-footer">
 				<el-button type="primary" @click="saveRelevance()">确 定</el-button>
 			</span>
@@ -118,6 +129,7 @@
 		},
 		props:{
 			editData:{},
+			codeOption: {},
 			targetOption: {},
 			originOption: {},
 			formDesignData: {},
@@ -139,6 +151,7 @@
 				optionTitle: '暂无数据',
 				loadingDia: false,
 				checkListrelevance: [],
+				radioList: [],
 			}
 		},
 		computed:{
@@ -208,12 +221,26 @@
 						case "defaultTime":
 							title = '是否默选中当前时间';
 							break;
+						case "paralanguage":
+							title = '辅助语';
+							break;
 					}
 					return title;
 				}
 			},
+			radioOption: function(){
+				return function(val, check){
+					let arr = val.filter((e) => {
+						return check.indexOf(e.field_sign) != -1;
+					});
+					return arr;
+				}
+			}
 		},
 		methods:{
+			seleChangeCode(){
+				console.log(this.editData.code);
+			},
 			switchChange(e, key){// 开关变化后改变值
 				e ? (this.$set(this.editData, key, 1)) : (this.$set(this.editData, key, 0));
 			},
@@ -236,14 +263,14 @@
 				if(!that.isListEdit){
 					// 处理总数据里面的关系组件数据
 					that.formDesignData.map((f_item, f_index) => {
-						if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && id == f_item.id){
+						if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && id == f_item.id){
 							that.formDesignData.splice(f_index, 1);
 						}
 					});
 				}else{
 					// 处理总数据里面的关系组件数据
 					that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-						if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && id == f_item.id){
+						if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && id == f_item.id){
 							that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 						}
 					});
@@ -251,26 +278,60 @@
 			},
 			addRelevance(){// 打开修改关联字段弹框
 				let that = this;
-				let arr = [];
-				let postObj = {
-					app_id: that.editData.target,
+				switch(that.editData.element){
+					case "Think":
+						let arrThink = [];
+						let postObjThink = {
+							relation_id: that.editData.target,
+						}
+						that.centerDialogVisibleDesign = true;
+						that.loadingDia = true;
+						that.editData.relevance.length && that.editData.relevance.map((item) => {
+							arrThink.push(item.id || item.field_sign);
+						});
+						that.$set(that, 'checkList', arrThink);
+						that.$set(that, 'checkOption', []); 
+						Network.post('/admin/form/relationField', postObjThink).then(datas => {
+							let newData = [];
+							datas.data.length && datas.data.map((item) => {
+								newData.push({
+									field_name: item.field_name,
+									field_sign: item.field_key
+								})
+							});
+							that.$set(that, 'checkOption', newData);
+							that.loadingDia = false;
+						}).catch(msg => {
+							that.$message.error(msg);
+							that.loadingDia = false;
+						});	
+						break;
+					default:
+						let arr = [];
+						let postObj = {
+							app_id: that.editData.target,
+						}
+						that.centerDialogVisibleDesign = true;
+						that.loadingDia = true;
+						that.editData.relevance.length && that.editData.relevance.map((item) => {
+							arr.push(item.id || item.field_sign);
+						});
+						that.$set(that, 'checkList', arr);
+						that.$set(that, 'checkOption', []); 
+						Network.post('/admin/form/appSign', postObj).then(datas => {
+							that.$set(that, 'checkOption', datas.data);
+							that.loadingDia = false;
+						}).catch(msg => {
+							that.$message.error(msg);
+							that.loadingDia = false;
+						});	
 				}
-				that.centerDialogVisibleDesign = true;
-				that.loadingDia = true;
-				that.editData.relevance.length && that.editData.relevance.map((item) => {
-					arr.push(item.id || item.field_sign);
-				});
-				that.$set(that, 'checkList', arr);
-				that.$set(that, 'checkOption', []); 
-				Network.post('/admin/form/appSign', postObj).then(datas => {
-					that.$set(that, 'checkOption', datas.data);
-					that.loadingDia = false;
-				}).catch(msg => {
-					that.$message.error(msg);
-					that.loadingDia = false;
-				});
 			},
 			saveRelevance(){// 保存修改关联字段
+				if(this.editData.element === 'Think' && this.checkList.length && !this.radioList.length){
+					this.$message.error('请选择入口组件');
+					return
+				}
 				let that = this;
 				let objData = that.checkOption.filter(function(s){
 					return that.checkList.indexOf(s.field_sign) != -1;
@@ -278,11 +339,20 @@
 				let objAfter = that.editData.relevance;
 				let arr = [];
 				objData.length && objData.map((item) => {
-					arr.push({
-						id: that.createid(),
-						tit: item.field_name,
-						val: item.field_sign,
-					});
+					if(this.radioList && this.radioList.indexOf(item.field_sign) != -1 && that.editData.element === 'Think'){
+						that.$set(that.editData, 'title', item.field_name);
+						arr.push({
+							id: that.editData.id,
+							tit: item.field_name,
+							val: item.field_sign,
+						});
+					}else{
+						arr.push({
+							id: that.createid(),
+							tit: item.field_name,
+							val: item.field_sign,
+						});
+					}
 				});
 				that.$set(that.editData, 'relevance', arr);
 				that.centerDialogVisibleDesign = false;
@@ -290,39 +360,74 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
 					});
 					arr.length && arr.map((item) => {
-						that.formDesignData.push({
-							element: "Binding",
-							id: item.id || item.field_sign,
-							title: item.tit || item.field_name,
-							value: "",
-							relevanceId: that.editData.id,
-						});
+						switch(that.editData.element){
+							case "Think":
+								if(item.id != that.editData.id){
+									that.formDesignData.push({
+										element: "Textbox",
+										id: item.id || item.field_sign,
+										title: item.tit || item.field_name,
+										value: "",
+										relevanceId: that.editData.id,
+										prompt: '请输入...',// 提示语
+										status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
+										isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+										isHidden: false,// 是否隐藏
+									});
+								}
+								break;
+							default:
+								that.formDesignData.push({
+									element: "Binding",
+									id: item.id || item.field_sign,
+									title: item.tit || item.field_name,
+									value: "",
+									relevanceId: that.editData.id,
+								});
+						}
 					});
 				}else{
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});
 					});
 					arr.length && arr.map((item) => {
-						that.formDesignData[that.listIndex].listData.header.push({
-							element: "Binding",
-							id: item.id || item.field_sign,
-							title: item.tit || item.field_name,
-							value: "",
-							relevanceId: that.editData.id,
-						});
+						switch(that.editData.element){
+							case "Think":
+								that.formDesignData[that.listIndex].listData.header.push({
+									element: "Textbox",
+									id: item.id || item.field_sign,
+									title: item.tit || item.field_name,
+									value: "",
+									relevanceId: that.editData.id,
+								});
+								break;
+							default:
+								that.formDesignData[that.listIndex].listData.header.push({
+									element: "Binding",
+									id: item.id || item.field_sign,
+									title: item.tit || item.field_name,
+									value: "",
+									relevanceId: that.editData.id,
+									prompt: '请输入...',// 提示语
+									status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
+									isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+									isHidden: false,// 是否隐藏
+								});
+						}
 					});
 				}
+				this.radioList = [];
 			},
 			seleChange(){// 切换目标字段之后需要重置关系数据
 				let that = this;
@@ -330,7 +435,7 @@
 					// 处理总数据里面的关系组件数据
 					that.editData.relevance.length && that.editData.relevance.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
@@ -340,7 +445,7 @@
 					// 处理总数据里面的关系组件数据
 					that.editData.relevance.length && that.editData.relevance.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});
@@ -386,7 +491,7 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
@@ -404,7 +509,7 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});
@@ -429,7 +534,7 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
@@ -438,7 +543,7 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if(f_item.element === "Binding" && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
+							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});
@@ -507,7 +612,7 @@
 				.relevance-box-div{
 					display: flex;
 					align-items: center;
-					width: 260px;
+					width: 214px;
 					height: 34px;
 					padding: 0 8px;
 					background: rgba(25, 31, 37, 0.04);
