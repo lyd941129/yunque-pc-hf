@@ -25,10 +25,16 @@ const routes = [{ //	登录路由
 		children: [{ // 应用管理路由
 			path: '/Application',
 			name: 'Application',
+			meta: {
+				title: '应用管理'
+			},
 			component: () => import("../views/ApplicationManagement.vue")
 		}, { // 我的桌面路由
 			path: '/MyDesktop',
 			name: 'MyDesktop',
+			meta: {
+				title: '我的桌面'
+			},
 			component: () => import("../views/MyDesktop.vue")
 		}]
 	},

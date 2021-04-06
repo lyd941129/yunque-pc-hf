@@ -3,7 +3,7 @@
 	<div class="formdesign" v-loading="loading">
 		<div class="part">
 			<h5>基础组件</h5>
-			<draggable v-model="partArr" animation="300" :options="{group:{name: 'site',pull:'clone'},sort: false}" ghostClass="ghost" @end="endRight">
+			<draggable v-model="partArr" animation="300" :options="{group:{name: 'site',pull:'clone'},sort: false}" @end="endRight">
 				<transition-group>
 					<div class="part-chunk" v-for="item in partArr" :key="item.id" @click="addElement(item)">
 						<i :class="item.icon"></i>
@@ -12,7 +12,7 @@
 				</transition-group>
 			</draggable>
 			<h5>复杂组件</h5>
-			<draggable v-model="partComplexArr" animation="300" :options="{group:{name: 'site',pull:'clone'},sort: false}" ghostClass="ghost" @end="endRight">
+			<draggable v-model="partComplexArr" animation="300" :options="{group:{name: 'site',pull:'clone'},sort: false}" @end="endRight">
 				<transition-group>
 					<div class="part-chunk part-chunk-complex" v-for="item in partComplexArr" :key="item.id" @click="addElement(item)">
 						<i :class="item.icon"></i>
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="property">
-			<div class="component-type" v-if="selectIndex != -1 && formDesignData[selectIndex]">[{{selectIndex != -1 ? titleText[formDesignData[selectIndex].element] : ''}}]</div>
+			<div class="component-type" v-if="selectId != -1 && formDesignData[selectIndex]">[{{selectId != -1 ? titleText[formDesignData[selectIndex].element] : ''}}]</div>
 			<property ref="property" :editData="isListEdit ? (selectId == -1 ? {} : listEditData) : (selectId == -1 ? {} : formDesignData[selectIndex])"
 			:targetOption="targetOption" :codeOption="codeOption" :associatedComponents.sync="associatedComponents" :formDesignData.sync="formDesignData" :isListEdit="isListEdit" :listIndex="listIndex"
 			:deepClone="deepClone" :createid="createid" :createCode="createCode" :judge="judge"
@@ -233,7 +233,7 @@
 					e.to.firstChild.className === 'part-chunk part-chunk-complex' && (this.partComplexArr.splice(e.newDraggableIndex, 1));
 				}else if(e.from.firstChild.className == 'part-chunk' && e.to.firstChild.className == 'part-chunk part-chunk-complex'){// 不允许右边组件往左边拖入
 					e.to.firstChild.className === 'part-chunk part-chunk-complex' && (this.partComplexArr.splice(e.newDraggableIndex, 1));
-				}else if(e.from.firstChild.className != 'part-chunk' && e.to.firstChild.className == 'part-chunk part-chunk-complex'){// 不允许右边组件往左边拖入
+				}else if(e.from.firstChild.className != 'part-chunk part-chunk-complex' && e.from.firstChild.className != 'part-chunk' && e.to.firstChild.className == 'part-chunk part-chunk-complex'){// 不允许右边组件往左边拖入
 					e.to.firstChild.className === 'part-chunk part-chunk-complex' && (this.partComplexArr.splice(e.newDraggableIndex, 1));
 				}
 			},

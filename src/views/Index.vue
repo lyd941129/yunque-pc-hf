@@ -3,11 +3,6 @@
 		<el-container>
 			<el-aside width="220px">
 				<div class="logo"></div>
-				<!-- <el-image class="logo" src="">
-					<div slot="error" class="image-slot">
-						<img src="../assets/img/logo.png" alt="">
-					</div>
-				</el-image> -->
 				<el-row class="tac" text-color="white">
 					<el-col>
 						<el-menu class="el-menu-vertical-demo" :default-active="$router.path" router>

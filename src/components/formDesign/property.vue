@@ -212,7 +212,7 @@
 							break;
 						case "relevance":
 							title = '关联字段';
-							this.editData.element == "Bringback" && (title = '关联组件');
+							// this.editData.element == "Bringback" && (title = '关联字段');
 							break;
 						case "target":
 							title = '目标字段';
@@ -239,7 +239,7 @@
 		},
 		methods:{
 			seleChangeCode(){
-				console.log(this.editData.code);
+				// console.log(this.editData.code);
 			},
 			switchChange(e, key){// 开关变化后改变值
 				e ? (this.$set(this.editData, key, 1)) : (this.$set(this.editData, key, 0));
