@@ -1,7 +1,7 @@
 <!-- 表单设计右边编辑展示 -->
 <template>
 	<div class="propertyElement" v-if="judge">
-		<div class="property-box" v-for="(item, key, index) in editData" :key="index">
+		<div class="property-box" v-for="(item, key, index) in editData" :key="key+index">
 			<div class="title">{{titleFun(key)}} <span class="tip" v-show="key === 'title' || key === 'prompt'">最多20字</span></div>
 			<!-- 标题 -->
 			<el-input v-if="key === 'title'" maxlength="20" v-model="editData[key]" placeholder="请输入标题"></el-input>
@@ -9,6 +9,8 @@
 			<el-input v-if="key === 'prompt'" maxlength="20" v-model="editData[key]" placeholder="请输入提示文字"></el-input>
 			<!-- 默认值 -->
 			<!-- <el-input v-if="key === 'value' && editData.element != 'Choice' && editData.element != 'Site' && editData.element != 'File' && editData.element != 'Money'" :type="(editData.element === 'Num' || editData.element === 'Money') ? 'number': ''" v-model="editData[key]" placeholder="请输入默认值"></el-input> -->
+			<!-- 是否开启数据源 -->
+			<el-switch v-if="key === 'openSource'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 是否必填 -->
 			<el-switch v-if="key === 'isRequired'" @change="switchChange($event, key)" :value="editData[key] == '1'" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 是否可写 -->
@@ -223,6 +225,9 @@
 							break;
 						case "paralanguage":
 							title = '辅助语';
+							break;
+						case "openSource": 
+							title = '是否开启数据源';
 							break;
 					}
 					return title;
@@ -554,7 +559,7 @@
 				this.$set(this, 'checkListrelevance', val);
 				// console.log(this.checkListrelevance)
 			},
-		}
+		},
 	}
 </script>
 

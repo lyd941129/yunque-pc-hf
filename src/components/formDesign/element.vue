@@ -127,7 +127,6 @@
 				// console.log(e);
 			},
 			openEditList(e){// 点击编辑
-				// console.log(e);
 				if(e.element === "Association"){
 					this.postTarget();
 				}else if(e.element === "Bringback"){
@@ -141,6 +140,7 @@
 				this.$emit('update:isListEdit', true);
 				this.$emit('update:selectId', e.id);
 				this.$emit('update:listIndex', this.parentIndex);
+				console.log(e);
 			},
 			copyElement(){// 点击复制
 				let that = this;
