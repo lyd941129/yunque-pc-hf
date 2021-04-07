@@ -419,20 +419,22 @@
 						switch(that.editData.element){
 							case "Bringback":
 							case "Think":
-								that.formDesignData[that.listIndex].listData.header.push({
-									element: "Textbox",
-									id: item.id || item.field_sign || item.value,
-									title: item.tit || item.field_name || item.lable,
-									value: "",
-									prompt: '请输入...',// 提示语
-									isSource: '',// 数据来源
-									paralanguage: '',// 问号里面显示的内容
-									fromId: '',// 来源id
-									relevanceId: that.editData.id,
-									status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
-									isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
-									isHidden: false,// 是否隐藏
-								});
+								if(item.id != that.editData.id){
+									that.formDesignData[that.listIndex].listData.header.push({
+										element: "Textbox",
+										id: item.id || item.field_sign || item.value,
+										title: item.tit || item.field_name || item.lable,
+										value: "",
+										prompt: '请输入...',// 提示语
+										isSource: '',// 数据来源
+										paralanguage: '',// 问号里面显示的内容
+										fromId: '',// 来源id
+										relevanceId: that.editData.id,
+										status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
+										isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+										isHidden: false,// 是否隐藏
+									});
+								}
 								break;
 							default:
 								that.formDesignData[that.listIndex].listData.header.push({
