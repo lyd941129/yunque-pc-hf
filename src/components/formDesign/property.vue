@@ -9,8 +9,6 @@
 			<el-input v-if="key === 'prompt'" maxlength="20" v-model="editData[key]" placeholder="请输入提示文字"></el-input>
 			<!-- 默认值 -->
 			<!-- <el-input v-if="key === 'value' && editData.element != 'Choice' && editData.element != 'Site' && editData.element != 'File' && editData.element != 'Money'" :type="(editData.element === 'Num' || editData.element === 'Money') ? 'number': ''" v-model="editData[key]" placeholder="请输入默认值"></el-input> -->
-			<!-- 是否开启数据源 -->
-			<el-switch v-if="key === 'openSource'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 是否必填 -->
 			<el-switch v-if="key === 'isRequired'" @change="switchChange($event, key)" :value="editData[key] == '1'" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 是否可写 -->
@@ -71,7 +69,7 @@
 			<!-- 是否合计 -->
 			<el-switch v-if="key === 'is_total'" @change="switchChange($event, key)" :value="editData[key] == '1'" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 关联字段 -->
-			<div v-if="key === 'relevance' && editData.element != 'Bringback'">
+			<div v-if="key === 'relevance'">
 				<div class="relevance-box" v-for="(item, index) in editData[key]" :key="index">
 					<div class="relevance-box-div">
 						<div style="width: 50%;">{{item.tit || item.field_name}}</div>
@@ -81,11 +79,11 @@
 				<el-button type="text" @click="addRelevance">修改字段</el-button>
 			</div>
 			<!-- 关联组件 -->
-			<div v-if="key === 'relevance' && editData.element == 'Bringback'">
+		<!-- 	<div v-if="key === 'relevance' && editData.element == 'Bringback'">
 				 <el-checkbox-group v-model="checkListrelevance" @change="bringbackChange">
 					<el-checkbox v-for="item in associatedComponents" :label="item.value" :value="item.value">{{item.label}}</el-checkbox>
 				</el-checkbox-group>
-			</div>
+			</div> -->
 			<!-- 目标字段 -->
 			<el-select v-if="key === 'target' && editData.element != 'Bringback' && editData.element != 'Think'" v-model="editData[key]" filterable placeholder="请选择" :no-data-text="optionTitle"
 			@change="seleChange">
@@ -106,11 +104,11 @@
 		<!-- 关联字段弹框 -->
 		<el-dialog title="修改字段" :visible.sync="centerDialogVisibleDesign" append-to-body  v-loading="loadingDia">
 			<el-checkbox-group v-model="checkList">
-				<el-checkbox v-for="(item) in checkOption" :key="item.field_sign" :label="item.field_sign" :value="item.field_sign">{{item.field_name}}</el-checkbox>
+				<el-checkbox v-for="(item, index) in checkOption" :key="item.field_sign || index" :label="item.field_sign || item.value" :value="item.field_sign || item.value">{{item.field_name || item.label}}</el-checkbox>
 			</el-checkbox-group>
-			<h3 v-if="checkList.length && editData.element === 'Think'">入口</h3>
-			<el-radio-group v-model="radioList" v-if="checkList.length && editData.element === 'Think'">
-				<el-radio v-for="(item, index) in radioOption(checkOption, checkList)" :key="item.field_sign" :label="item.field_sign" :value="item.field_sign">{{item.field_name}}</el-radio>
+			<h3 v-if="checkList.length && (editData.element === 'Think' || editData.element === 'Bringback')">入口</h3>
+			<el-radio-group v-model="radioList" v-if="checkList.length && (editData.element === 'Think' || editData.element === 'Bringback')">
+				<el-radio v-for="(item, index) in radioOption(checkOption, checkList)" :key="item.field_sign || index" :label="item.field_sign || item.value" :value="item.field_sign || item.value">{{item.field_name || item.label}}</el-radio>
 			</el-radio-group>
 			<span slot="footer" class="dialog-footer">
 				<el-button type="primary" @click="saveRelevance()">确 定</el-button>
@@ -226,9 +224,6 @@
 						case "paralanguage":
 							title = '辅助语';
 							break;
-						case "openSource": 
-							title = '是否开启数据源';
-							break;
 					}
 					return title;
 				}
@@ -236,7 +231,7 @@
 			radioOption: function(){
 				return function(val, check){
 					let arr = val.filter((e) => {
-						return check.indexOf(e.field_sign) != -1;
+						return check.indexOf(e.field_sign || e.value) != -1;
 					});
 					return arr;
 				}
@@ -311,6 +306,16 @@
 							that.loadingDia = false;
 						});	
 						break;
+					case "Bringback":
+						let arrBack = [];
+						that.editData.relevance.length && that.editData.relevance.map((item) => {
+							arrBack.push(item.id || item.field_sign);
+						});
+						that.$set(that, 'checkList', arrBack);
+						that.centerDialogVisibleDesign = true;
+						that.$set(that, 'checkOption', []);
+						that.$set(that, 'checkOption', that.associatedComponents);
+						break;
 					default:
 						let arr = [];
 						let postObj = {
@@ -333,29 +338,29 @@
 				}
 			},
 			saveRelevance(){// 保存修改关联字段
-				if(this.editData.element === 'Think' && this.checkList.length && !this.radioList.length){
+				if((this.editData.element === 'Think' || this.editData.element === 'Bringback') && this.checkList.length && !this.radioList.length){
 					this.$message.error('请选择入口组件');
 					return
 				}
 				let that = this;
 				let objData = that.checkOption.filter(function(s){
-					return that.checkList.indexOf(s.field_sign) != -1;
+					return that.checkList.indexOf(s.field_sign || s.value) != -1;
 				});
 				let objAfter = that.editData.relevance;
 				let arr = [];
-				objData.length && objData.map((item) => {
-					if(this.radioList && this.radioList.indexOf(item.field_sign) != -1 && that.editData.element === 'Think'){
-						that.$set(that.editData, 'title', item.field_name);
+				objData.length && objData.map((item) => {// 处理入口组件
+					if(this.radioList && this.radioList.indexOf(item.field_sign || item.value) != -1 && (that.editData.element === 'Think' || that.editData.element === 'Bringback')){
+						that.$set(that.editData, 'title', (item.field_name || item.label));
 						arr.push({
 							id: that.editData.id,
-							tit: item.field_name,
-							val: item.field_sign,
+							tit: item.field_name || item.label,
+							val: item.field_sign || item.value,
 						});
 					}else{
 						arr.push({
 							id: that.createid(),
-							tit: item.field_name,
-							val: item.field_sign,
+							tit: item.field_name || item.label,
+							val: item.field_sign || item.value,
 						});
 					}
 				});
@@ -372,15 +377,19 @@
 					});
 					arr.length && arr.map((item) => {
 						switch(that.editData.element){
+							case "Bringback":
 							case "Think":
 								if(item.id != that.editData.id){
 									that.formDesignData.push({
 										element: "Textbox",
-										id: item.id || item.field_sign,
-										title: item.tit || item.field_name,
+										id: item.id || item.field_sign || item.value,
+										title: item.tit || item.field_name || item.lable,
 										value: "",
-										relevanceId: that.editData.id,
 										prompt: '请输入...',// 提示语
+										isSource: '',// 数据来源
+										paralanguage: '',// 问号里面显示的内容
+										fromId: '',// 来源id
+										relevanceId: that.editData.id,
 										status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
 										isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 										isHidden: false,// 是否隐藏
@@ -408,13 +417,21 @@
 					});
 					arr.length && arr.map((item) => {
 						switch(that.editData.element){
+							case "Bringback":
 							case "Think":
 								that.formDesignData[that.listIndex].listData.header.push({
 									element: "Textbox",
-									id: item.id || item.field_sign,
-									title: item.tit || item.field_name,
+									id: item.id || item.field_sign || item.value,
+									title: item.tit || item.field_name || item.lable,
 									value: "",
+									prompt: '请输入...',// 提示语
+									isSource: '',// 数据来源
+									paralanguage: '',// 问号里面显示的内容
+									fromId: '',// 来源id
 									relevanceId: that.editData.id,
+									status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
+									isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+									isHidden: false,// 是否隐藏
 								});
 								break;
 							default:

@@ -29,7 +29,7 @@
 		<div class="box choice-box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Choice' || information.element === 'Data' || information.element === 'Association' || information.element === 'Bringback' || information.element === 'Think'">
 			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
 			<div class="tip"><div>{{information.value ? information.value : information.prompt}}</div><i class="el-icon-arrow-right"></i></div>
-			<div class="relevance-box" v-if="information.relevance && information.element !== 'Think'">
+			<div class="relevance-box" v-if="information.relevance && information.element !== 'Think' && information.element !== 'Bringback'">
 				<div class="relevance-item" v-for="(item, index) in information.relevance" :key="index">{{item.field_name || item.tit}}</div>
 			</div>
 		</div>
@@ -60,7 +60,7 @@
 						<subassemblyElement v-for="(item, index) in information.listData.header" :key="item.id" :information="item" :openEdit="openEditList"
 						:addFun="addFun" :deepClone="deepClone" :createid="createid" :createCode="createCode" :selectId.sync="selectIdChild"
 						:parentData.sync="information.listData.header" :parentIndex="index"
-						:postTarget="postTarget" :postCode="postCode" :judge.sync="judgeChild" :getBringback="getBringback"></subassemblyElement>
+						:postTarget="postTarget" :postCode="postCode" :judge.sync="judgeChild" :getBringback="getBringback" :postOrigin="postOrigin"></subassemblyElement>
 					</transition-group>
 				</draggable>
 			</div>
@@ -95,6 +95,7 @@
 			postCode:{},
 			judge: {},
 			getBringback: {},
+			postOrigin: {},
 		},
 		data(){
 			return {
@@ -123,6 +124,7 @@
 				this.$emit('update:listIndex', this.parentIndex);
 				if(obj.element === "Bringback"){
 					this.getBringback();
+					this.postOrigin();
 				}
 				// console.log(e);
 			},
@@ -131,6 +133,7 @@
 					this.postTarget();
 				}else if(e.element === "Bringback"){
 					this.getBringback(e);
+					this.postOrigin();
 				}else if(e.element === "Think"){
 					this.postTarget('think');
 				}else if(e.element === "Choice"){
@@ -150,6 +153,7 @@
 				(obj.relevance && obj.relevance.length) && obj.relevance.map((item) => {// 此操作是为了赋值过程中有关系数据则需要在父级数据加入相关数据
 					item.id = that.createid();
 					switch(obj.element){
+						case "Bringback":
 						case "Think":
 							that.parentData.push({
 								element: "Textbox",

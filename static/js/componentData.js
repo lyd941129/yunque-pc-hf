@@ -102,11 +102,12 @@ export default {
 		title: '选择带回',
 		prompt: '请选择...',// 提示语
 		paralanguage: '',// 问号里面显示的内容
+		isSource: '',// 数据来源
+		fromId: '',// 来源id
 		id: 'lh1WGWXfyW',
 		target: '',
 		relevance: [],
 		value: '',
-		openSource: false,
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		isHidden: false,// 是否隐藏

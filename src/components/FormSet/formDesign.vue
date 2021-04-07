@@ -30,7 +30,7 @@
 								<subassemblyElement v-for="(item, index) in formDesignData" :key="index" :information="item" :openEdit="openEdit"
 								:addFun="addFun" :deepClone="deepClone" :createid="createid" :createCode="createCode" :selectId.sync="selectId"
 								:parentData.sync="formDesignData" :parentIndex="index" :listEditData.sync="listEditData" :isListEdit.sync="isListEdit"
-								:postTarget="postTarget" :listIndex.sync="listIndex" :judge.sync="judge" :getBringback="getBringback"></subassemblyElement>
+								:postTarget="postTarget" :listIndex.sync="listIndex" :judge.sync="judge" :getBringback="getBringback" :postOrigin="postOrigin"></subassemblyElement>
 						</transition-group>
 					</draggable>
 					<i class="empty" v-show="formDesignData.length == 0">点击或拖拽添加控件</i>
@@ -379,6 +379,7 @@
 				}).catch(() => {});
 			},
 			getBringback(val){// 选择带回组件接口数据
+				this.postOrigin();
 				let that = this;
 				let postObj = {}
 				Network.post('/admin/form/back', postObj).then(datas => {
