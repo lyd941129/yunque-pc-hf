@@ -414,7 +414,16 @@
 			flex: 1;
 			background-color: rgba(245, 246, 246, 1);
 			max-width: 304px;
-
+			overflow: auto;
+			&::-webkit-scrollbar{
+				width: 4px;
+				height: 4px;
+				background-color: #f8f8f8;
+			}
+			&::-webkit-scrollbar-thumb {
+				border-radius: 16px;
+				background-color: #e8e8e8;
+			}
 			h5 {
 				margin-left: 16px;
 			}
