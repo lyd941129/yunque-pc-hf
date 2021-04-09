@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<!-- 弹框 -->
-		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='530px' :destroy-on-close="true">
+		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='530px' :destroy-on-close="true" top="10vh">
 			<el-dialog width="400px" title="选择图标" :visible.sync="innerVisible" append-to-body class="icon-dialog">
 				<div class="icon-div" v-for="(item, index) in arrIcon" :key="index" :class="{'active': item == form.iconUrl}" @click="selectIcon(item)">
 					<i class="icon" :class="item">

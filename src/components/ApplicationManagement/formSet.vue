@@ -3,10 +3,10 @@
 	<div ref="formset" class="formset" v-loading="loading">
 		<el-form :inline="true" :model="formInline" class="demo-form-inline">
 			<el-form-item label="表单名称">
-				<el-input v-model="formInline.name" placeholder="请输入表单名称" clearable></el-input>
+				<el-input @keyup.enter.native="onScreen" v-model="formInline.name" placeholder="请输入表单名称" clearable></el-input>
 			</el-form-item>
 			<el-form-item label="生成单据前缀">
-				<el-input v-model="formInline.sn_prefix" placeholder="请输入生成单据前缀" clearable></el-input>
+				<el-input @keyup.enter.native="onScreen" v-model="formInline.sn_prefix" placeholder="请输入生成单据前缀" clearable></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button class="btn-wihte" type="primary" @click="onScreen">确认筛选</el-button>

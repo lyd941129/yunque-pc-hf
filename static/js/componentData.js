@@ -117,7 +117,7 @@ export default {
 		title: '文件上传',
 		paralanguage: '',// 问号里面显示的内容
 		id: '31',
-		limit: '10',// 上传个数限制
+		limit: '20',// 上传个数限制
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		value: [],
