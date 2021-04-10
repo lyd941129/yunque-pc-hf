@@ -334,6 +334,8 @@
 					that.$set(that, 'centerDialogVisibleJsDesign', true);
 					let str = data.data.js ? data.data.js : '';
 					that.$set(that, 'matterJs', str);
+					that.$set(that, 'fieldArr', []);
+					that.$set(that, 'invariant', []);
 					// 处理右边字段渲染数据
 					data.data.field.length && data.data.field.map((item) => {
 						if(item.header){
