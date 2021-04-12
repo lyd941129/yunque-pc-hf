@@ -100,6 +100,10 @@
 			</el-select>
 			<!-- 辅助语 -->
 			<el-input v-if="key === 'paralanguage'" type="textarea" autosize placeholder="请输入辅助内容" v-model="editData[key]"></el-input>
+			<!-- 是否验证唯一性 -->
+			<el-switch v-if="key === 'isVerify'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
+			<!-- 是否自动生成 -->
+			<el-switch v-if="key === 'isAutomatic'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
 		</div>
 		<!-- 关联字段弹框 -->
 		<el-dialog title="修改字段" :visible.sync="centerDialogVisibleDesign" append-to-body  v-loading="loadingDia">
@@ -223,6 +227,12 @@
 							break;
 						case "paralanguage":
 							title = '辅助语';
+							break;
+						case "isVerify":
+							title = '验证唯一性';
+							break;
+						case "isAutomatic":
+							title = '自动生成';
 							break;
 					}
 					return title;

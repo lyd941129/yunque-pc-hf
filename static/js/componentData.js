@@ -14,6 +14,8 @@ export default {
 		isSource: '',// 数据来源
 		paralanguage: '',// 问号里面显示的内容
 		fromId: '',// 来源id
+		isVerify: false,// 是否开启验证
+		isAutomatic: false,// 是否自动生成
 		status: '1',// 组件状态：‘0’为不可填状态，‘1’为可写状态
 		id: '2',// 组件标识
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
