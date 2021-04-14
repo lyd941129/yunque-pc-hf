@@ -13,9 +13,9 @@ Vue.mixin({
 			//动态请求地址             协议               主机
 			this.allUrl  = protocol + "//" + host ;
 		}
-		if(localStorage.getItem('tokenTime') == null && window.location.hash != "#/log"){
-			this.$router.push('/log');
-		}
+		// if(localStorage.getItem('tokenTime') == null && window.location.hash != "#/log"){
+		// 	this.$router.push('/log');
+		// }
 		this.loginData = localStorage.getItem("loginData") ? JSON.parse(localStorage.getItem("loginData")) : {};
 	},
 	data(){

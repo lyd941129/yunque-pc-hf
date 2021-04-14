@@ -1,9 +1,9 @@
 // 导入axios
 import axios from 'axios';
 import router from "../router/index.js"
-import {
-	tokenExpressInTime
-} from '../../static/js/utils.js'
+// import {
+// 	tokenExpressInTime
+// } from '../../static/js/utils.js'
 import {
 	Message
 } from 'element-ui'
@@ -25,32 +25,32 @@ if (reg.test(host)) {
 // 请求响应超时时间
 axios.defaults.timeout = 5000;
 // http request 请求拦截器
-axios.interceptors.request.use(config => {
-	// 在发送请求之前做些什么
-	if(window.location.hash != "#/log" && !localStorage.getItem('tokenTime') == null){
-		router.push('/log');
-	}
-	if (window.location.hash != "#/log" && tokenExpressInTime() && localStorage.getItem('tokenTime')) {
-		Message({
-			type: 'error',
-			center: true,
-			message: '登录超时请重新登录',
-			duration: 2000
-		})
-		setTimeout(() => {
-			router.push('/log');
-			setTimeout(function(){
-				localStorage.clear();
-			}, 100);
-		}, 1500)
-		return false
-	}
-	return config;
-}, error => {
-	// 对请求错误做些什么
-	console.log('error request:', error)
-	return Promise.reject(error);
-});
+// axios.interceptors.request.use(config => {
+// 	// 在发送请求之前做些什么
+// 	if(window.location.hash != "#/log" && !localStorage.getItem('tokenTime') == null){
+// 		router.push('/log');
+// 	}
+// 	if (window.location.hash != "#/log" && tokenExpressInTime() && localStorage.getItem('tokenTime')) {
+// 		Message({
+// 			type: 'error',
+// 			center: true,
+// 			message: '登录超时请重新登录',
+// 			duration: 2000
+// 		})
+// 		setTimeout(() => {
+// 			router.push('/log');
+// 			setTimeout(function(){
+// 				localStorage.clear();
+// 			}, 100);
+// 		}, 1500)
+// 		return false
+// 	}
+// 	return config;
+// }, error => {
+// 	// 对请求错误做些什么
+// 	console.log('error request:', error)
+// 	return Promise.reject(error);
+// });
 // 封装自己的get/post方法
 export default {
 	get: function(path = '', data = {}, header, istype) {

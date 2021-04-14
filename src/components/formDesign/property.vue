@@ -104,6 +104,10 @@
 			<el-switch v-if="key === 'isVerify'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 是否自动生成 -->
 			<el-switch v-if="key === 'isAutomatic'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
+			<!-- 仅图片 -->
+			<el-switch v-if="key === 'onlyPictures'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
+			<!-- 仅文档 -->
+			<el-switch v-if="key === 'onlyDocuments'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
 		</div>
 		<!-- 关联字段弹框 -->
 		<el-dialog title="修改字段" :visible.sync="centerDialogVisibleDesign" append-to-body  v-loading="loadingDia">
@@ -233,6 +237,12 @@
 							break;
 						case "isAutomatic":
 							title = '自动生成';
+							break;
+						case "onlyPictures":
+							title = '仅图片';
+							break;
+						case "onlyDocuments":
+							title = '仅文档';
 							break;
 					}
 					return title;

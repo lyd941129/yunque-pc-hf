@@ -120,6 +120,8 @@ export default {
 		paralanguage: '',// 问号里面显示的内容
 		id: '31',
 		limit: '20',// 上传个数限制
+		onlyPictures: false,// 仅图片
+		onlyDocuments: false,// 仅文档
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		value: [],

@@ -111,8 +111,8 @@
 									that.$router.push('/');
 								}, 1000)
 								localStorage.setItem("loginData", JSON.stringify(data.data));
-								let timedate = new Date().getTime() + ((data.expires/60/60) * 3600 * 1000);
-								localStorage.setItem('tokenTime', timedate);
+								// let timedate = new Date().getTime() + ((data.expires/60/60) * 3600 * 1000);
+								// localStorage.setItem('tokenTime', timedate);
 							}else{
 								that.$message({
 									message: data.msg,
