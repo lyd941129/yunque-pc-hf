@@ -101,7 +101,7 @@
 						Network.post('/admin/login/login',{
 							password: that.ruleForm.pass,
 							account: that.ruleForm.phone,
-						}, {},true).then(data => {
+						},true).then(data => {
 							if(data.code === 1){
 								that.$message({
 									message: '登陆成功！',

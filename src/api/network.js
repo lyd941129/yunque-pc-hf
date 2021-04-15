@@ -21,10 +21,19 @@ if (reg.test(host)) {
 	//动态请求地址             协议               主机
 	axios.defaults.baseURL = protocol + "//" + host;
 }
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'; //配置请求头信息。
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'; //配置请求头信息。
 // 请求响应超时时间
 axios.defaults.timeout = 5000;
 // http request 请求拦截器
+axios.interceptors.request.use(config => {
+	if(window.location.hash != "#/log"){
+		let loginData = localStorage.getItem("loginData") ? JSON.parse(localStorage.getItem("loginData")) : {};
+		config.headers['token'] = loginData.token;  //config里就是可以统一配置request请求的参数，headers就可以在这设置
+	}
+	return config
+},
+	error => Promise.reject(error)
+);
 // axios.interceptors.request.use(config => {
 // 	// 在发送请求之前做些什么
 // 	if(window.location.hash != "#/log" && !localStorage.getItem('tokenTime') == null){
@@ -53,11 +62,11 @@ axios.defaults.timeout = 5000;
 // });
 // 封装自己的get/post方法
 export default {
-	get: function(path = '', data = {}, header, istype) {
+	get: function(path = '', data = {}, istype) {
 		return new Promise(function(resolve, reject) {
 			axios.get(path, {
 					params: data
-				},header)
+				})
 				.then(function(response) {
 					// 按需求来，这里我需要的是response.data，所以返回response.data，一般直接返回response
 					if (response.data.code === 1 || response.data.code === 7001 || response.data
@@ -88,9 +97,9 @@ export default {
 				});
 		});
 	},
-	post: function(path = '', data = {}, header, istype) {
+	post: function(path = '', data = {}, istype) {
 		return new Promise(function(resolve, reject) {
-			axios.post(path, data, header)
+			axios.post(path, data)
 				.then(function(response) {
 					// 按需求来，这里我需要的是response.data，所以返回response.data，一般直接返回response
 					if (response.data.code === 1) {

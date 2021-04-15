@@ -73,12 +73,7 @@
 				switch(command){
 					case "logout":// 退出登录
 						that.loading = true;
-						Network.post('/admin/user/logout', '', {
-							headers: {
-								'content-type': 'application/json',
-								"token": that.loginData.token  //token换成从缓存获取
-							}
-						}).then(data => {
+						Network.post('/admin/user/logout', '').then(data => {
 							if(data.code === 1){
 								that.$message({
 									message: data.msg,
