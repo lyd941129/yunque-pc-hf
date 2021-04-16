@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<!-- 弹框 -->
-		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='530px' :destroy-on-close="true" top="10vh">
+		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='80%' :destroy-on-close="true" top="10vh">
 			<el-dialog width="400px" title="选择图标" :visible.sync="innerVisible" append-to-body class="icon-dialog">
 				<div class="icon-div" v-for="(item, index) in arrIcon" :key="index" :class="{'active': item == form.iconUrl}" @click="selectIcon(item)">
 					<i class="icon" :class="item">
@@ -85,6 +85,12 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+				<el-form-item label="列表类型" prop="list_type">
+					<el-select v-model="form.list_type" placeholder="请选择应用分组">
+						<el-option v-for="item in listtypes" :key="item.value" :label="item.lable" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="可见范围" prop="scope">
 					<el-radio-group v-model="form.scope">
 						<el-radio label="1">发布</el-radio>
@@ -97,8 +103,14 @@
 						<el-radio label="0">否</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="应用介绍">
-					<el-input type="textarea" :rows="6" v-model="form.introduce"></el-input>
+				<el-form-item label="应用简介">
+					<el-input type="textarea" :rows="2" v-model="form.introduce"></el-input>
+				</el-form-item>
+				<!-- app_detail -->
+				<el-form-item label="应用详情">
+					<div class="ueditor-box" ref="editor">
+						<vue-ueditor-wrap v-model="form.app_detail" :config="config" @ready="ready"></vue-ueditor-wrap>
+					</div>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -129,12 +141,14 @@
 					iconType: '0',
 					name: '',
 					grouping: '',
+					list_type: '',
 					scope: '',
 					introduce: '',
 					icon: '',
 					id: '',
 					app_project: '',
 					app_sign: '',
+					app_detail: '',
 				},
 				rules: {
 					name: [{
@@ -150,6 +164,11 @@
 					grouping: [{
 						required: true,
 						message: '请选择应用分组',
+						trigger: 'change'
+					}],
+					list_type: [{
+						required: true,
+						message: '请选择列表类型',
 						trigger: 'change'
 					}],
 					scope: [{
@@ -168,6 +187,23 @@
 					dict_value: "1",
 					is_default: "N",
 				}],
+				listtypes:[{
+						value: 'text_list',
+						lable: '文字列表',
+					},
+					{
+						value: 'img_text_list',
+						lable: '图文列表',
+					},
+					{
+						value: 'file_list',
+						lable: '文档列表',
+					},
+					{
+						value: 'show_list',
+						lable: '商品展示列表',
+					},
+				],
 				isSelectImg: false,
 				innerVisible: false,
 				arrIcon: [
@@ -207,7 +243,16 @@
 					"icon-timeplan",
 					"icon-card",
 					"icon-tower",
-				]
+				],
+				config: {
+					UEDITOR_HOME_URL: '/ueditor/', // 需要令此处的URL等于对应 ueditor.config.js 中的配置。
+					autoHeightEnabled: true,
+					autoFloatEnabled: true,
+					initialFrameWidth: '100%',
+					initialFrameHeight: '100%',
+				},
+				msg: '',
+				editor: null
 			}
 		},
 		mounted() {
@@ -292,12 +337,14 @@
 					iconType: '0',
 					name: '',
 					grouping: '',
+					list_type: '',
 					scope: '',
 					introduce: '',
 					icon: '',
 					id: '',
 					app_project: '',
 					app_sign: '',
+					app_detail: '',
 				}
 				that.$set(that, 'form', obj);
 				that.$set(that, 'imageUrl', '');
@@ -318,8 +365,10 @@
 						name: data.data.app_name,
 						app_sign: data.data.app_sign,
 						grouping: data.data.app_group + "",
+						list_type: data.data.list_type + "",
 						scope: data.data.installed + "",
 						introduce: data.data.describe,
+						app_detail: data.data.app_detail,
 						icon: data.data.app_style,
 						id: id,
 						app_project: data.data.app_project + "",
@@ -368,13 +417,15 @@
 				that.form.id && (formData.append('id', that.form.id));
 				formData.append('app_name', that.form.name);
 				formData.append('app_group', that.form.grouping);
+				formData.append('list_type', that.form.list_type);
 				formData.append('installed', that.form.scope);
 				formData.append('describe', that.form.introduce);
+				formData.append('app_detail', that.form.app_detail);
 				formData.append('app_project', that.form.app_project);
 				formData.append('app_sign', that.form.app_sign);
 				formData.append('icon_url', that.form.iconUrl);
 				that.loading = true;
-				// console.log(this.imageUrl)
+				// console.log(formData)
 				// return
 				Network.post('/admin/application/saveApp', formData).then(data => {
 					that.$message({
@@ -390,7 +441,12 @@
 			},
 			selectIcon(val){
 				this.form.iconUrl = val;
-			}
+			},
+			ready (editorInstance) {// 富文本初始化完成后，获取富文本实例
+				// console.log(`编辑器实例${editorInstance.key}: `, editorInstance);
+				this.$set(this, 'editor', editorInstance);
+				// this.editor.setHeight(this.$refs.editor.offsetHeight-106);
+			},
 		},
 		watch:{
 			'form.iconType':{
