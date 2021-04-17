@@ -32,6 +32,11 @@
 						<div style="margin-left: 10px">{{ scope.row.installed == '1' ? '是' : '否' }}</div>
 					</template>
 				</el-table-column>
+				<el-table-column label="是否默认" align="center">
+					<template slot-scope="scope">
+						<div style="margin-left: 10px">{{ scope.row.is_default == '1' ? '是' : '否' }}</div>
+					</template>
+				</el-table-column>
 				<!-- <el-table-column label="最后修改人" prop="people" align="center"></el-table-column> -->
 				<el-table-column label="最后修改时间" align="center">
 					<template slot-scope="scope">
@@ -56,6 +61,12 @@
 					<el-radio-group v-model="form.enable">
 						<el-radio label="1">启用</el-radio>
 						<el-radio label="0">停用</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="是否默认" prop="is_default">
+					<el-radio-group v-model="form.is_default">
+						<el-radio label="1">是</el-radio>
+						<el-radio label="0">否</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="描述">
@@ -125,6 +136,7 @@
 					// rank: '',
 					enable: '',
 					introduce: '',
+					is_default: '',
 				},
 				rules: {
 					name: [{
@@ -223,6 +235,7 @@
 					// rank: '',
 					enable: '',
 					introduce: '',
+					is_default: '',
 				};
 				this.$set(this, 'form', obj);
 				this.$set(this, 'title', '新增表单');
@@ -252,6 +265,7 @@
 						prefix: data.data.sn_prefix,
 						// rank: '',
 						enable: data.data.installed + '',
+						is_default: data.data.is_default + '',
 						introduce: data.data.describe,
 						id: data.data.id,
 					};
@@ -276,6 +290,7 @@
 							"table_tpl": '',
 							"sn_prefix": this.form.prefix,
 							"installed": this.form.enable,
+							"is_default": this.form.is_default,
 							"describe": this.form.introduce,
 						}
 						if (this.form.id) {
