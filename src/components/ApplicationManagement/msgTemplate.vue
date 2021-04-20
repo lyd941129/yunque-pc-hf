@@ -239,6 +239,13 @@
 				this.$emit('update:templateData', this.templateData);
 			},
 			addPictureConfiguration(val){// 添加图片配置
+				let arr = this.templateData.field_url.filter((e) => {
+					return val.field_sign == e.id
+				});
+				if(arr.length){
+					this.$message.error('已存在该字段！');
+					return
+				}
 				this.templateData.field_url.push({
 					id: val.field_sign,
 					title: val.field_name
