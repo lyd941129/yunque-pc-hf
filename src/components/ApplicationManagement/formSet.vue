@@ -18,6 +18,8 @@
 			<el-button type="primary" class="btn-blue" @click="openDesign">表单设计</el-button>
 			<el-button type="primary" class="btn-blue" @click="openFormJs">表单JS</el-button>
 			<el-button type="primary" class="btn-blue" @click="openPrint">打印模板</el-button>
+			<el-button type="primary" class="btn-blue" @click="openList">列表模板设置</el-button>
+			<el-button type="primary" class="btn-blue" @click="openMsg">消息推送模板</el-button>
 			<el-button type="danger" class="btn-red" @click="deleteTable">删除</el-button>
 		</el-row>
 		<div class="table-box">
@@ -102,12 +104,31 @@
 				<el-button type="primary" @click="foemJsSave">保存</el-button>
 			</span>
 		</el-dialog>
+		<!-- 列表设置弹框 -->
+		<el-dialog title="表单列表-设计" :modal="false" :visible.sync="centerDialogVisiblelist" center :fullscreen="true" 
+		class="dialog-design-js" v-loading="loadingList" :destroy-on-close="true">
+			<msgTemplate key="search" :selectData="fieldSelect" :list_type="list_type" :templateData.sync="templateData" :searchData="searchData" 
+			searchJudge="yes"></msgTemplate>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="foemListSave">保存</el-button>
+			</span>
+		</el-dialog>
+		<!-- 消息模板设置弹框 -->
+		<el-dialog title="表单列表-设计" :modal="false" :visible.sync="centerDialogVisiblemsg" center :fullscreen="true" 
+		class="dialog-design-js" v-loading="loadingList" :destroy-on-close="true">
+			<msgTemplate key="msg" :selectData="fieldSelect" :list_type="list_type" :templateData.sync="templateData" :searchData="searchData" 
+			searchJudge="no"></msgTemplate>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="foemMsgSave">保存</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
 	import Network from '../../api/network.js';// 引用请求的方法
 	import formDesign from '../FormSet/formDesign.vue';// 表单设计组件
+	import msgTemplate from './msgTemplate.vue';// 列表设置组件
 	// import componentData from '../../../static/js/componentData.js';
 	export default {
 		created() {
@@ -121,15 +142,19 @@
 		},
 		components: {
 			formDesign,
+			msgTemplate,
 		},
 		data() {
 			return {
 				loading: true,
 				loadingJs: false,
+				loadingList: false,
 				title: '新增表单',
 				centerDialogVisible: false,
 				centerDialogVisibleDesign: false,
 				centerDialogVisibleJsDesign: false,
+				centerDialogVisiblelist: false,
+				centerDialogVisiblemsg: false,
 				form: {
 					name: '',
 					prefix: '',
@@ -186,6 +211,10 @@
 				fieldArr: [],
 				invariant: [],
 				formNamedes: '',
+				templateData: '',
+				fieldSelect: [],
+				searchData: [],
+				list_type: '',
 			}
 		},
 		methods: {
@@ -330,6 +359,133 @@
 				}
 				this.adhibitionFun(obj, 'printTemplate');
 			},
+			openList(){// 打开列表设置
+				let selectData = this.getSelected();
+				let that = this;
+				if (selectData.length > 1) {
+					that.$message.error('只能选择一项！');
+					return
+				} else if (selectData.length == 0) {
+					that.$message.error('请选择一项！');
+					return
+				}
+				let objPost = {
+					"app_id": this.itemData.id,
+					"table_id": selectData[0].id
+				}
+				that.loading = true;
+				Network.post('/admin/list/design', objPost).then(data => {
+					that.loading = false;
+					that.list_type = data.data.base.list_type;
+					if(Array.isArray(data.data.list) && !data.data.list.length){
+						switch(that.list_type){
+							case "list_text":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': '',//主标题(主标题设置)
+									'field_main_title': '',
+									'field_main_show': '',
+									'field_vice': '',//副标题（两列显示）
+									'field_vice_title': '',
+									'field_vice_show': '',
+								}
+								break;
+							case "list_img":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': '',//主标题(主标题设置)
+									'field_main_title': '',
+									'field_main_show': '',
+									'field_content': '',//内容标题（一列显示）
+									'field_content_title': '',
+									'field_content_show': '',
+									'field_vice': '',//副标题（两列显示）
+									'field_vice_title': '',
+									'field_vice_show': '',
+									'field_url': [],// 图片配置
+								}
+								break;
+							case "list_down":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': '',//主标题(主标题设置)
+									'field_main_title': '',
+									'field_main_show': '',
+									'field_content': '',//内容标题（一列显示）
+									'field_content_title': '',
+									'field_content_show': '',
+									'field_vice': '',//副标题（两列显示）
+									'field_vice_title': '',
+									'field_vice_show': '',
+									'field_url': '',// 附件配置
+								}
+								break;
+							case "list_shop":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': '',//主标题(主标题设置)
+									'field_main_title': '',
+									'field_main_show': '',
+									'field_content': '',//内容标题（一列显示）
+									'field_content_title': '',
+									'field_content_show': '',
+									'field_vice': '',//副标题（两列显示）
+									'field_vice_title': '',
+									'field_vice_show': '',
+									'field_url': '',// 图片配置
+								}
+								break;
+						}
+					}else{
+						that.templateData = data.data.list;
+					}
+					that.fieldSelect = data.data.field;
+					that.searchData = data.data.search;
+					that.centerDialogVisiblelist = true;
+					console.log(data);
+				}).catch(msg => {
+					that.$message.error(msg);
+					that.loading = false;
+				});
+			},
+			openMsg(){// 打开消息模板设置
+				let selectData = this.getSelected();
+				let that = this;
+				if (selectData.length > 1) {
+					that.$message.error('只能选择一项！');
+					return
+				} else if (selectData.length == 0) {
+					that.$message.error('请选择一项！');
+					return
+				}
+				let objPost = {
+					"app_id": this.itemData.id,
+					"table_id": selectData[0].id
+				}
+				that.loading = true;
+				Network.post('/admin/list/template', objPost).then(data => {
+					that.loading = false;
+					if(Array.isArray(data.data.template) && !data.data.template.length){
+						that.templateData = {
+							'table_id': data.data.base.table_id,
+							'field_main': '',//主标题(主标题设置)
+							'field_main_title': '',
+							'field_main_show': '',
+							'field_vice': '',//副标题（两列显示）
+							'field_vice_title': '',
+							'field_vice_show': '',
+						}
+					}else{
+						that.templateData = data.data.template;
+					}
+					that.fieldSelect = data.data.field;
+					that.centerDialogVisiblemsg = true;
+					console.log(data);
+				}).catch(msg => {
+					that.$message.error(msg);
+					that.loading = false;
+				});
+			},
 			openFormJs(){// 打开表单js设计
 				let selectData = this.getSelected();
 				let that = this;
@@ -400,6 +556,49 @@
 				}).catch(msg => {
 					that.$message.error(msg);
 					that.loadingJs = false;
+				});
+			},
+			foemListSave(){// 表单列表设置保存
+				let that = this;
+				that.loadingList = true;
+				let objPost = {
+					"app_id": that.itemData.id,
+					"table_id": that.templateData.table_id,
+					"list": that.templateData,
+					"search": that.searchData,
+				}
+				console.log(objPost);
+				Network.post('/admin/list/save', objPost).then(data => {
+					that.$message({
+						message: data.msg,
+						type: 'success'
+					});
+					that.loadingList = false;
+					this.$set(this, 'centerDialogVisiblelist', false);
+				}).catch(msg => {
+					that.$message.error(msg);
+					that.loadingList = false;
+				});
+			},
+			foemMsgSave(){// 消息模板设置保存
+				let that = this;
+				that.loadingList = true;
+				let objPost = {
+					"app_id": that.itemData.id,
+					"table_id": that.templateData.table_id,
+					"template": that.templateData,
+				}
+				console.log(objPost);
+				Network.post('/admin/list/templateSave', objPost).then(data => {
+					that.$message({
+						message: data.msg,
+						type: 'success'
+					});
+					that.loadingList = false;
+					this.$set(this, 'centerDialogVisiblemsg', false);
+				}).catch(msg => {
+					that.$message.error(msg);
+					that.loadingList = false;
 				});
 			},
 			on_select(val) { // 让表格点击行可以选中

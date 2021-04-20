@@ -188,19 +188,19 @@
 					is_default: "N",
 				}],
 				listtypes:[{
-						value: 'text_list',
+						value: 'list_text',
 						lable: '文字列表',
 					},
 					{
-						value: 'img_text_list',
+						value: 'list_img',
 						lable: '图文列表',
 					},
 					{
-						value: 'file_list',
+						value: 'list_down',
 						lable: '文档列表',
 					},
 					{
-						value: 'show_list',
+						value: 'list_shop',
 						lable: '商品展示列表',
 					},
 				],
