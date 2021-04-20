@@ -73,12 +73,12 @@ export default {
 						.code === 7002 || response.data.code === 7003) {
 						resolve(response.data);
 					} else if (response.data.code === 2001) {
-						Message({
-							type: 'error',
-							center: true,
-							message: '登录超时请重新登录',
-							duration: 2000
-						})
+						// Message({ 
+						// 	type: 'error',
+						// 	center: true,
+						// 	message: '登录超时请重新登录',
+						// 	duration: 2000
+						// })
 						setTimeout(() => {
 							router.push('/log');
 							setTimeout(function(){
@@ -105,12 +105,12 @@ export default {
 					if (response.data.code === 1) {
 						resolve(response.data);
 					} else if (response.data.code === 2001) {
-						Message({
-							type: 'error',
-							center: true,
-							message: '登录超时请重新登录',
-							duration: 2000
-						})
+						// Message({
+						// 	type: 'error',
+						// 	center: true,
+						// 	message: '登录超时请重新登录',
+						// 	duration: 2000
+						// })
 						setTimeout(() => {
 							router.push('/log');
 							setTimeout(function(){

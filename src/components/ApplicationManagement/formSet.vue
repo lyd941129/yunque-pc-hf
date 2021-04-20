@@ -215,6 +215,7 @@
 				fieldSelect: [],
 				searchData: [],
 				list_type: '',
+				editId: '',
 			}
 		},
 		methods: {
@@ -377,6 +378,7 @@
 				Network.post('/admin/list/design', objPost).then(data => {
 					that.loading = false;
 					that.list_type = data.data.base.list_type;
+					that.editId = data.data.base.id;
 					if(Array.isArray(data.data.list) && !data.data.list.length){
 						switch(that.list_type){
 							case "list_text":
@@ -562,6 +564,7 @@
 				let that = this;
 				that.loadingList = true;
 				let objPost = {
+					'id': that.editId,
 					"app_id": that.itemData.id,
 					"table_id": that.templateData.table_id,
 					"list": that.templateData,

@@ -73,19 +73,19 @@
 					</div>
 					<el-input v-model="form.iconUrl" style="display: none;" autocomplete="off" clearable></el-input>
 				</el-form-item>
-				<el-form-item label="应用名称" prop="name">
+				<el-form-item label="应用名称" prop="name" style="width: 400px;">
 					<el-input v-model="form.name" autocomplete="off" clearable></el-input>
 				</el-form-item>
-				<el-form-item label="应用标识" prop="app_sign">
+				<el-form-item label="应用标识" prop="app_sign" style="width: 400px;">
 					<el-input v-model="form.app_sign" autocomplete="off" clearable></el-input>
 				</el-form-item>
-				<el-form-item label="应用分组" prop="grouping">
+				<el-form-item label="应用分组" prop="grouping" style="width: 400px;">
 					<el-select v-model="form.grouping" placeholder="请选择应用分组">
 						<el-option v-for="item in options" :key="item.dict_value" :label="item.dict_label" :value="item.dict_value">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="列表类型" prop="list_type">
+				<el-form-item label="列表类型" prop="list_type" style="width: 400px;">
 					<el-select v-model="form.list_type" placeholder="请选择应用分组">
 						<el-option v-for="item in listtypes" :key="item.value" :label="item.lable" :value="item.value">
 						</el-option>
@@ -103,7 +103,7 @@
 						<el-radio label="0">否</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="应用简介">
+				<el-form-item label="应用简介" style="width: 400px;">
 					<el-input type="textarea" :rows="2" v-model="form.introduce"></el-input>
 				</el-form-item>
 				<!-- app_detail -->
