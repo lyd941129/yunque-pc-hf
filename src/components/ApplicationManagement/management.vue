@@ -91,7 +91,7 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="可见范围" prop="scope">
+				<el-form-item label="是否发布" prop="scope">
 					<el-radio-group v-model="form.scope">
 						<el-radio label="1">发布</el-radio>
 						<el-radio label="0">未发布</el-radio>

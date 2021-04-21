@@ -37,7 +37,7 @@
 					return objData.id == s.id;
 				});
 				if (obj.length > 0) {
-					that.editableTabsValue = obj[0].lengthNum + 1 + '';
+					that.editableTabsValue = obj[0].name + '';
 					return
 				}
 				that.editableTabs.push({

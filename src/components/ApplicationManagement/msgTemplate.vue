@@ -210,7 +210,7 @@
 				if(type === '1'){
 					this.templateData.field_main = [];
 				}else if(type === '2'){
-					this.templateData.field_content_show = [];
+					this.templateData.field_content = [];
 				}else {
 					this.templateData.field_vice = [];
 				}
@@ -223,7 +223,7 @@
 						if(type === '1'){
 							that.templateData.field_main.push(titleObj[0].field_sign)
 						}else if(type === '2'){
-							that.templateData.field_content_show.push(titleObj[0].field_sign)
+							that.templateData.field_content.push(titleObj[0].field_sign)
 						}else {
 							that.templateData.field_vice.push(titleObj[0].field_sign)
 						}
@@ -233,11 +233,11 @@
 				if(type === '1'){
 					this.templateData.field_main_title = show;
 				}else if(type === '2'){
-					that.templateData.field_content_title.push(titleObj[0].field_sign)
+					this.templateData.field_content_title = show;
 				}else {
 					this.templateData.field_vice_title = show
 				}
-				type === '1' ? (this.templateData.field_main_title = show) : (this.templateData.field_vice_title = show);
+				// type === '1' ? (this.templateData.field_main_title = show) : (this.templateData.field_vice_title = show);
 				this.$emit('update:templateData', this.templateData);
 			},
 			addPictureConfiguration(val){// 添加图片配置
