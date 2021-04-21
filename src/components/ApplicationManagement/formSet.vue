@@ -439,12 +439,57 @@
 								break;
 						}
 					}else{
-						that.templateData = data.data.list;
+						switch(that.list_type){
+							case "list_text":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': data.data.list.field_main ? data.data.list.field_main : [],//主标题(主标题设置)
+									'field_main_title': data.data.list.field_main_title ? data.data.list.field_main_title : '',
+									'field_main_show': data.data.list.field_main_show ? data.data.list.field_main_show : '',
+									'field_vice': data.data.list.field_vice ? data.data.list.field_vice : [],//副标题（两列显示）
+									'field_vice_title': data.data.list.field_vice_title ? data.data.list.field_vice_title : '',
+									'field_vice_show': data.data.list.field_vice_show ? data.data.list.field_vice_show : '',
+								}
+								break;
+							case "list_img":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': data.data.list.field_main ? data.data.list.field_main : [],//主标题(主标题设置)
+									'field_main_title': data.data.list.field_main_title ? data.data.list.field_main_title : '',
+									'field_main_show': data.data.list.field_main_show ? data.data.list.field_main_show : '',
+									'field_content': data.data.list.field_content ? data.data.list.field_content : [],//内容标题（一列显示）
+									'field_content_title': data.data.list.field_content_title ? data.data.list.field_content_title : '',
+									'field_content_show': data.data.list.field_content_show ? data.data.list.field_content_show : '',
+									'field_vice': data.data.list.field_vice ? data.data.list.field_vice : [],//副标题（两列显示）
+									'field_vice_title': data.data.list.field_vice_title ? data.data.list.field_vice_title : '',
+									'field_vice_show': data.data.list.field_vice_show ? data.data.list.field_vice_show : '',
+									'field_url': data.data.list.field_url ? data.data.list.field_url : [],// 图片配置
+								}
+								break;
+							case "list_down":
+							case "list_shop":
+								that.templateData = {
+									'table_id': data.data.base.table_id,
+									'field_main': data.data.list.field_main ? data.data.list.field_main : [],//主标题(主标题设置)
+									'field_main_title': data.data.list.field_main_title ? data.data.list.field_main_title : '',
+									'field_main_show': data.data.list.field_main_show ? data.data.list.field_main_show : '',
+									'field_content': data.data.list.field_content ? data.data.list.field_content : [],//内容标题（一列显示）
+									'field_content_title': data.data.list.field_content_title ? data.data.list.field_content_title : '',
+									'field_content_show': data.data.list.field_content_show ? data.data.list.field_content_show : '',
+									'field_vice': data.data.list.field_vice ? data.data.list.field_vice : [],//副标题（两列显示）
+									'field_vice_title': data.data.list.field_vice_title ? data.data.list.field_vice_title : '',
+									'field_vice_show': data.data.list.field_vice_show ? data.data.list.field_vice_show : '',
+									'field_url': data.data.list.field_url ? data.data.list.field_url : '',// 图片配置
+								}
+								break;
+						}
+						// that.templateData = data.data.list;
 					}
 					that.fieldSelect = data.data.field;
 					that.searchData = data.data.search;
-					that.centerDialogVisiblelist = true;
-					console.log(data);
+					that.$nextTick(function(){
+						that.centerDialogVisiblelist = true;
+					})
 				}).catch(msg => {
 					that.$message.error(msg);
 					that.loading = false;
@@ -467,6 +512,7 @@
 				that.loading = true;
 				Network.post('/admin/list/template', objPost).then(data => {
 					that.loading = false;
+					that.editId = data.data.base.id;
 					if(Array.isArray(data.data.template) && !data.data.template.length){
 						that.templateData = {
 							'table_id': data.data.base.table_id,
@@ -478,7 +524,16 @@
 							'field_vice_show': '',
 						}
 					}else{
-						that.templateData = data.data.template;
+						// that.templateData = data.data.template;
+						that.templateData = {
+							'table_id': data.data.base.table_id,
+							'field_main': data.data.template.field_main ? data.data.template.field_main : [],//主标题(主标题设置)
+							'field_main_title': data.data.template.field_main_title ? data.data.template.field_main_title : '',
+							'field_main_show': data.data.template.field_main_show ? data.data.template.field_main_show : '',
+							'field_vice': data.data.template.field_vice ? data.data.template.field_vice : [],//副标题（两列显示）
+							'field_vice_title': data.data.template.field_vice_title ? data.data.template.field_vice_title : '',
+							'field_vice_show': data.data.template.field_vice_show ? data.data.template.field_vice_show : '',
+						}
 					}
 					that.fieldSelect = data.data.field;
 					that.centerDialogVisiblemsg = true;
@@ -587,6 +642,7 @@
 				let that = this;
 				that.loadingList = true;
 				let objPost = {
+					'id': that.editId,
 					"app_id": that.itemData.id,
 					"table_id": that.templateData.table_id,
 					"template": that.templateData,
