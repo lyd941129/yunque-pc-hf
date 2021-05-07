@@ -6,6 +6,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/commonality.less';
 import './common/mixin/mixin.js';
+import '../public/ueditor/ueditor.config.js';
+import '../public/ueditor/ueditor.all.js';
+import '../public/ueditor/lang/zh-cn/zh-cn.js';
 
 // 在 main.js 中引入
 import VueUeditorWrap from 'vue-ueditor-wrap'

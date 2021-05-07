@@ -13,9 +13,10 @@
     "element-ui": "^2.14.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
-    "vue-ueditor-wrap": "^2.4.4",
+    "vue-ueditor-wrap": "^2.5.3",
     "vuedraggable": "^2.24.3",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "wangeditor": "^4.6.17"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

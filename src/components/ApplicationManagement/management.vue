@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<!-- 弹框 -->
-		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='80%' :destroy-on-close="true" top="10vh">
+		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='80%' :destroy-on-close="true" top="10vh" @closed="closed">
 			<el-dialog width="400px" title="选择图标" :visible.sync="innerVisible" append-to-body class="icon-dialog">
 				<div class="icon-div" v-for="(item, index) in arrIcon" :key="index" :class="{'active': item == form.iconUrl}" @click="selectIcon(item)">
 					<i class="icon" :class="item">
@@ -109,7 +109,8 @@
 				<!-- app_detail -->
 				<el-form-item label="应用详情">
 					<div class="ueditor-box" ref="editor">
-						<vue-ueditor-wrap v-model="form.app_detail" :config="config" @ready="ready"></vue-ueditor-wrap>
+						<!-- <vue-ueditor-wrap v-model="form.app_detail" :config="config" @ready="ready"></vue-ueditor-wrap> -->
+						<div id="div1"></div>
 					</div>
 				</el-form-item>
 			</el-form>
@@ -122,6 +123,7 @@
 
 <script>
 	import Network from '../../api/network.js';// 请求的封装方法
+	import E from 'wangeditor';
 	export default {
 		props: {
 			adhibitionFun: {},// 打开新页签方法
@@ -252,7 +254,7 @@
 					initialFrameHeight: '100%',
 				},
 				msg: '',
-				editor: null
+				editor: null,
 			}
 		},
 		mounted() {
@@ -348,6 +350,7 @@
 				}
 				that.$set(that, 'form', obj);
 				that.$set(that, 'imageUrl', '');
+				that.createEditor();
 			},
 			seting(id) { // 打开编辑应用模态框
 				let that = this;
@@ -378,6 +381,7 @@
 					if(!data.data.app_style){
 						that.$set(that, 'imageUrl', '');
 					}
+					that.createEditor(data.data.app_detail);
 					that.loading = false;
 				}).catch(msg => {
 					that.$message.error(msg);
@@ -420,12 +424,12 @@
 				formData.append('list_type', that.form.list_type);
 				formData.append('installed', that.form.scope);
 				formData.append('describe', that.form.introduce);
-				formData.append('app_detail', that.form.app_detail);
+				formData.append('app_detail', that.editor.txt.html());
 				formData.append('app_project', that.form.app_project);
 				formData.append('app_sign', that.form.app_sign);
 				formData.append('icon_url', that.form.iconUrl);
 				that.loading = true;
-				// console.log(formData)
+				// console.log(that.editor.txt.html())
 				// return
 				Network.post('/admin/application/saveApp', formData).then(data => {
 					that.$message({
@@ -447,6 +451,40 @@
 				this.$set(this, 'editor', editorInstance);
 				// this.editor.setHeight(this.$refs.editor.offsetHeight-106);
 			},
+			createEditor(html){
+				let that = this;
+				that.$nextTick(function(){
+					that.editor = new E( document.getElementById('div1') );
+					that.editor.config.customUploadImg = function (resultFiles, insertImgFn) {
+					    // resultFiles 是 input 中选中的文件列表
+					    // insertImgFn 是获取图片 url 后，插入到编辑器的方法
+						// console.log(resultFiles);
+						let formData = new FormData();
+						for (var i=0;i<resultFiles.length;i++){
+							formData.append("files",resultFiles[i])
+						}
+						Network.post('/admin/upload/file', formData).then(data => {
+							// console.log(data);
+							let arr = [];
+							data.data.length && data.data.map((e) => {
+								arr.push(e.url);
+							});
+							insertImgFn(arr);
+						}).catch(msg => {
+							that.$message.error(msg);
+							that.loading = false;
+						});
+					    // 上传图片，返回结果，将图片插入到编辑器中
+						// insertImgFn(imgUrl)
+					}
+					that.editor.create();
+					html && (that.editor.txt.html(html));
+				})
+			},
+			closed(){
+				this.editor.destroy();
+				this.editor = null;
+			}
 		},
 		watch:{
 			'form.iconType':{
@@ -572,6 +610,9 @@
 	}
 </style>
 <style lang="less">
+	.el-form-item__content{
+		z-index: 1;
+	}
 	.el-dialog__header {
 		background: linear-gradient(90deg, #1890FF, #40A9FF);
 		padding: 10px;
@@ -583,7 +624,6 @@
 		.el-dialog__headerbtn{
 			top: 15px;
 		}
-
 	}
 
 	.el-dialog--center .el-dialog__body {
