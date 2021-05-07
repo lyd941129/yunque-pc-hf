@@ -461,15 +461,19 @@
 						// console.log(resultFiles);
 						let formData = new FormData();
 						for (var i=0;i<resultFiles.length;i++){
-							formData.append("files",resultFiles[i])
+							formData.append("file",resultFiles[i])
 						}
+						that.editor.config.uploadImgMaxLength = 1; // 一次最多上传 1 个图片
 						Network.post('/admin/upload/file', formData).then(data => {
 							// console.log(data);
-							let arr = [];
-							data.data.length && data.data.map((e) => {
-								arr.push(e.url);
-							});
-							insertImgFn(arr);
+							let str = 'http://yqadmin.taozizi.cn/'+data.data.url;
+							console.log(str);
+							insertImgFn(str);
+							// let arr = [];
+							// data.data.length && data.data.map((e) => {
+							// 	arr.push(e.url);
+							// });
+							// insertImgFn(arr);
 						}).catch(msg => {
 							that.$message.error(msg);
 							that.loading = false;
