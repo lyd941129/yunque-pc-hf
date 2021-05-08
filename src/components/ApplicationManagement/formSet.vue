@@ -114,7 +114,7 @@
 			</span>
 		</el-dialog>
 		<!-- 消息模板设置弹框 -->
-		<el-dialog title="表单列表-设计" :modal="false" :visible.sync="centerDialogVisiblemsg" center :fullscreen="true" 
+		<el-dialog title="消息推送模板-设计" :modal="false" :visible.sync="centerDialogVisiblemsg" center :fullscreen="true" 
 		class="dialog-design-js" v-loading="loadingList" :destroy-on-close="true">
 			<msgTemplate key="msg" :selectData="fieldSelect" :list_type="list_type" :templateData.sync="templateData" :searchData="searchData" 
 			searchJudge="no"></msgTemplate>
