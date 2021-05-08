@@ -30,7 +30,7 @@
 								<subassemblyElement v-for="(item, index) in formDesignData" :key="index" :information="item" :openEdit="openEdit"
 								:addFun="addFun" :deepClone="deepClone" :createid="createid" :createCode="createCode" :selectId.sync="selectId"
 								:parentData.sync="formDesignData" :parentIndex="index" :listEditData.sync="listEditData" :isListEdit.sync="isListEdit"
-								:postTarget="postTarget" :listIndex.sync="listIndex" :judge.sync="judge" :getBringback="getBringback" :postOrigin="postOrigin"></subassemblyElement>
+								:postTarget="postTarget" :listIndex.sync="listIndex" :judge.sync="judge" :getBringback="getBringback" :postOrigin="postOrigin" :postCode="postCode"></subassemblyElement>
 						</transition-group>
 					</draggable>
 					<i class="empty" v-show="formDesignData.length == 0">点击或拖拽添加控件</i>
