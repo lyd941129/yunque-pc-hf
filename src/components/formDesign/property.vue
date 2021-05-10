@@ -43,7 +43,7 @@
 			<el-select v-if="key === 'dataType'" v-model="editData[key]" filterable placeholder="请选择">
 				<el-option label="年-月-日" value="date"></el-option>
 				<el-option label="时:分" value="time"></el-option>
-				<el-option label="年-月-日 时:分" value="dataTime"></el-option>
+				<el-option label="年-月-日 时:分" value="dateTime"></el-option>
 			</el-select>
 			<!-- 金额单位 -->
 			<el-select v-if="key === 'unit'" v-model="editData[key]" filterable placeholder="请选择">
