@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="property">
-			<div class="component-type" v-if="selectId != -1 && formDesignData[selectIndex]">[{{selectId != -1 ? titleText[formDesignData[selectIndex].element] : ''}}]</div>
+			<div class="component-type" v-if="selectId != -1 && formDesignData[selectIndex]">[{{selectId != -1 ? (!isListEdit ? titleText[formDesignData[selectIndex].element] : titleText[listEditData.element])  : ''}}]</div>
 			<property ref="property" :editData="isListEdit ? (selectId == -1 ? {} : listEditData) : (selectId == -1 ? {} : formDesignData[selectIndex])"
 			:targetOption="targetOption" :codeOption="codeOption" :associatedComponents.sync="associatedComponents" :formDesignData.sync="formDesignData" :isListEdit="isListEdit" :listIndex="listIndex"
 			:deepClone="deepClone" :createid="createid" :createCode="createCode" :judge="judge"

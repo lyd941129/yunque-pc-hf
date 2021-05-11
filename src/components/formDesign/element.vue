@@ -58,9 +58,10 @@
 				<draggable v-model="information.listData.header" group="site" animation="300" @add='addFun' ghostClass="ghost" @end="endRight" :move="moveRight">
 					<transition-group>
 						<subassemblyElement v-for="(item, index) in information.listData.header" :key="item.id" :information="item" :openEdit="openEditList"
-						:addFun="addFun" :deepClone="deepClone" :createid="createid" :createCode="createCode" :selectId.sync="selectIdChild"
-						:parentData.sync="information.listData.header" :parentIndex="index"
+						:addFun="addFun" :deepClone="deepClone" :createid="createid" :createCode="createCode" :selectId.sync="selectIdChild" @selectIdchange="selectIdchangechild"
+						:parentData.sync="information.listData.header" :parentIndex="index" :isListEdit="true" @judgechange="judgechangechild"
 						:postTarget="postTarget" :postCode="postCode" :judge.sync="judgeChild" :getBringback="getBringback" :postOrigin="postOrigin"></subassemblyElement>
+						
 					</transition-group>
 				</draggable>
 			</div>
@@ -107,6 +108,9 @@
 			
 		},
 		methods:{
+			changeData(){
+				this.$emit('update:selectId', -1);
+			},
 			addFun(e){// 拖拽完成后更新右边数据
 				// 这个是用于判断拖动的是否是表哥与非表格之间，是则不需要重新创建数据
 				if(e.from.parentNode.parentNode.parentNode.className === "phone" && e.to.parentNode.parentNode.parentNode.className === "box list-box"){
@@ -190,11 +194,26 @@
 					});
 				});
 				this.parentData.splice(this.parentIndex, 1);
-				if(id == this.selectId){
-					this.$emit('update:selectId', '-1');
+				if(id == this.selectId && !this.isListEdit){
+					this.$emit('update:selectId', -1);
+				}else if(id == this.selectId && this.isListEdit){
+					this.$emit('selectIdchange');
 				}
 				this.$emit('update:parentData', this.parentData);
 				// 此操作是为了解决在删除一些复杂组件时造成dom刷新不及时以至于影响右边编辑栏的显示问题
+				this.$emit('update:judge', false);
+				if(this.isListEdit){
+					this.$emit('judgechange');
+				}else{
+					this.$nextTick(function(){
+						this.$emit('update:judge', true);
+					});
+				}
+			},
+			selectIdchangechild(){
+				this.$emit('update:selectId', -1);
+			},
+			judgechangechild(){
 				this.$emit('update:judge', false);
 				this.$nextTick(function(){
 					this.$emit('update:judge', true);
