@@ -3,7 +3,7 @@
 	<div class="application">
 		<el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
 			<el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title" :name="item.name">
-				<component :ref="'applicat'+ index" :is="item.type" :key="item.type" :adhibitionFun="adhibitionFun" :itemData="item" :editableTabs.sync="editableTabs" :editableTabsValue.sync="editableTabsValue"></component>
+				<component :ref="'applicat'+ index" :is="item.type" :key="item.type" :adhibitionFun="adhibitionFun" :csadhibitionFun="csadhibitionFun" :itemData="item" :editableTabs.sync="editableTabs" :editableTabsValue.sync="editableTabsValue"></component>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -13,11 +13,13 @@
 	import management from '../components/ApplicationManagement/management.vue';
 	import formSet from '../components/ApplicationManagement/formSet.vue';
 	import printTemplate from '../components/ApplicationManagement/printTemplate.vue';
+	import custom from '../components/custom/custom.vue';
 	export default {
 		components: {
 			management,
 			formSet,
 			printTemplate,
+			custom,
 		},
 		data() {
 			return {
@@ -31,6 +33,17 @@
 			}
 		},
 		methods: {
+			csadhibitionFun(){// 测试
+				let that = this;
+				that.editableTabs.push({
+					title: '公告',
+					name: 'gg',
+					type: 'custom',
+					id: 'customgg',
+					lengthNum: that.editableTabs.length
+				});
+				that.editableTabsValue = 'gg';
+			},
 			adhibitionFun(objData, type) {// 添加新的页签
 				let that = this;
 				let obj = that.editableTabs.filter(function(s) {

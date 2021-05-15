@@ -23,6 +23,22 @@
 				</div>
 			</div>
 		</div>
+		<div>
+			<h5>测试模块</h5>
+			<div class="adhibition">
+				<div class="adhibition-box">
+					<i class="icon icon-nail"></i>
+					<span>测试公告</span>
+					<div class="operation">
+						<ul>
+							<li @click="csadhibitionFun()">进入</li>
+							<li @click="csseting()">设置</li>
+							<li @click="csstopApp()">停用</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 		<h6>未发布</h6>
 		<div class="adhibition">
 			<div class="adhibition-box" v-for="(item, index) in noEnabled" :key="index" @mouseover="over('no', index)"
@@ -129,6 +145,7 @@
 			adhibitionFun: {},// 打开新页签方法
 			editableTabs: {},
 			editableTabsValue: {},
+			csadhibitionFun: {},
 		},
 		data() {
 			return {
@@ -488,7 +505,14 @@
 			closed(){
 				this.editor.destroy();
 				this.editor = null;
-			}
+			},
+			// 测试
+			csseting(){
+				
+			},
+			csstopApp(){
+				
+			},
 		},
 		watch:{
 			'form.iconType':{
