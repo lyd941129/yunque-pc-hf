@@ -56,9 +56,10 @@
 				that.editableTabs.push({
 					title: objData.app_name,
 					name: that.addNum + '',
-					type: type,
+					type: objData.custom_status ? 'custom' : type,
 					id: objData.id,
-					lengthNum: that.editableTabs.length
+					lengthNum: that.editableTabs.length,
+					custom_url: objData.custom_url ? objData.custom_url : '',
 				});
 				that.editableTabsValue = that.addNum + '';
 				that.addNum = ++that.addNum;

@@ -23,22 +23,6 @@
 				</div>
 			</div>
 		</div>
-		<div>
-			<h5>测试模块</h5>
-			<div class="adhibition">
-				<div class="adhibition-box">
-					<i class="icon icon-nail"></i>
-					<span>测试公告</span>
-					<div class="operation">
-						<ul>
-							<li @click="csadhibitionFun()">进入</li>
-							<li @click="csseting()">设置</li>
-							<li @click="csstopApp()">停用</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
 		<h6>未发布</h6>
 		<div class="adhibition">
 			<div class="adhibition-box" v-for="(item, index) in noEnabled" :key="index" @mouseover="over('no', index)"
@@ -119,13 +103,20 @@
 						<el-radio label="0">否</el-radio>
 					</el-radio-group>
 				</el-form-item>
+				<el-form-item label="应用自定义" prop="custom_status">
+					<el-radio-group v-model="form.custom_status">
+						<el-radio label="1">启用</el-radio>
+						<el-radio label="0">未启用</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item v-show="form.custom_status == '1'" label="自定义路由" prop="custom_url" style="width: 400px;">
+					<el-input v-model="form.custom_url" autocomplete="off" clearable></el-input>
+				</el-form-item>
 				<el-form-item label="应用简介" style="width: 400px;">
 					<el-input type="textarea" :rows="2" v-model="form.introduce"></el-input>
 				</el-form-item>
-				<!-- app_detail -->
 				<el-form-item label="应用详情">
 					<div class="ueditor-box" ref="editor">
-						<!-- <vue-ueditor-wrap v-model="form.app_detail" :config="config" @ready="ready"></vue-ueditor-wrap> -->
 						<div id="div1"></div>
 					</div>
 				</el-form-item>
@@ -145,7 +136,6 @@
 			adhibitionFun: {},// 打开新页签方法
 			editableTabs: {},
 			editableTabsValue: {},
-			csadhibitionFun: {},
 		},
 		data() {
 			return {
@@ -168,6 +158,8 @@
 					app_project: '',
 					app_sign: '',
 					app_detail: '',
+					custom_status: '',
+					custom_url: ''
 				},
 				rules: {
 					name: [{
@@ -192,12 +184,12 @@
 					}],
 					scope: [{
 						required: true,
-						message: '请选择应用可见范围',
+						message: '请选择应用是否发布',
 						trigger: 'change'
 					}],
 					app_project: [{
 						required: true,
-						message: '请选择应用可见范围',
+						message: '请选择是否项目应用',
 						trigger: 'change'
 					}],
 				},
@@ -364,6 +356,8 @@
 					app_project: '',
 					app_sign: '',
 					app_detail: '',
+					custom_status: "",
+					custom_url: "",
 				}
 				that.$set(that, 'form', obj);
 				that.$set(that, 'imageUrl', '');
@@ -392,6 +386,8 @@
 						icon: data.data.app_style,
 						id: id,
 						app_project: data.data.app_project + "",
+						custom_status: data.data.custom_status + "",
+						custom_url: data.data.custom_url,
 					}
 					that.$set(that, 'form', obj);
 					that.$set(that, 'imageUrl', that.allUrl+'/' + data.data.app_style);
@@ -445,6 +441,8 @@
 				formData.append('app_project', that.form.app_project);
 				formData.append('app_sign', that.form.app_sign);
 				formData.append('icon_url', that.form.iconUrl);
+				formData.append('custom_status', that.form.custom_status);
+				formData.append('custom_url', that.form.custom_url);
 				that.loading = true;
 				// console.log(that.editor.txt.html())
 				// return
