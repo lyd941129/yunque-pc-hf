@@ -22,10 +22,10 @@
 				<el-table-column label="表单名称" prop="name" align="center"></el-table-column>
 				<el-table-column label="表单标识" prop="sign" align="center"></el-table-column>
 				<el-table-column label="生成单据前缀" prop="prefix" align="center"></el-table-column>
-				<el-table-column label="描述" prop="dsc" align="center"></el-table-column>
+				<el-table-column label="描述" prop="dsc" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="是否启用" prop="enable" align="center"></el-table-column>
 				<el-table-column label="最后修改人" prop="people" align="center"></el-table-column>
-				<el-table-column label="最后修改时间" prop="time" align="center"></el-table-column>
+				<el-table-column label="最后修改时间" prop="time" align="center" show-overflow-tooltip></el-table-column>
 			</el-table>
 		</div>
 		<!-- 弹框 -->

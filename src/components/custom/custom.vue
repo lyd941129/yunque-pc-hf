@@ -12,6 +12,7 @@
 		},
 		created() {
 			this.src = `http://yqflow.taozizi.cn/custom/index.html#${this.itemData.custom_url}?type=look`;
+			// this.src = `http://localhost:8080/#${this.itemData.custom_url}?type=look`;
 		},
 		data() {
 			return {

@@ -28,7 +28,7 @@
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column label="表单名称" prop="table_name" align="center"></el-table-column>
 				<el-table-column label="生成单据前缀" prop="sn_prefix" align="center"></el-table-column>
-				<el-table-column label="描述" prop="describe" align="center"></el-table-column>
+				<el-table-column label="描述" prop="describe" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="是否启用" align="center">
 					<template slot-scope="scope">
 						<div style="margin-left: 10px">{{ scope.row.installed == '1' ? '是' : '否' }}</div>
@@ -40,7 +40,7 @@
 					</template>
 				</el-table-column>
 				<!-- <el-table-column label="最后修改人" prop="people" align="center"></el-table-column> -->
-				<el-table-column label="最后修改时间" align="center">
+				<el-table-column label="最后修改时间" align="center" show-overflow-tooltip>
 					<template slot-scope="scope">
 						<div style="margin-left: 10px">{{getLocalTime(scope.row.update_time)}}</div>
 					</template>

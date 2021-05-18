@@ -20,7 +20,7 @@
 			 :select-on-indeterminate='false' height="100%" @row-click="on_select">
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column label="模板名称" prop="print_name" align="center"></el-table-column>
-				<el-table-column label="模板描述" prop="describe" align="center"></el-table-column>
+				<el-table-column label="模板描述" prop="describe" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column label="是否为默认模板" prop="print_default" align="center">
 					<template slot-scope="scope">
 						<div style="margin-left: 10px">{{ scope.row.print_default == '1' ? '是' : '否' }}</div>
@@ -31,7 +31,7 @@
 						<div style="margin-left: 10px">{{ scope.row.installed == '1' ? '是' : '否' }}</div>
 					</template>
 				</el-table-column>
-				<el-table-column label="最后修改时间" prop="update_time" align="center">
+				<el-table-column label="最后修改时间" prop="update_time" align="center" show-overflow-tooltip>
 					<template slot-scope="scope">
 						<div style="margin-left: 10px">{{getLocalTime(scope.row.update_time)}}</div>
 					</template>
