@@ -57,6 +57,13 @@
 		</el-select>
 		<el-button type="primary" slot="append" @click="addTitleAssistant(assistant, 'field_vice', 'field_vice_show', 'field_vice_title')">选择</el-button>
 		<el-input type="textarea" v-model="templateData.field_vice_show" @change="textareaChange(templateData.field_vice_show)" :autosize="{minRows: 6}"></el-input>
+		<!-- 回复设置 -->
+		<div v-if="list_type=='list_img'" style="">
+			<h4>回复功能配置</h4>
+			<el-switch style="width: 100%;" v-model="reply" active-text="开启回复" inactive-text="关闭回复" @change="addAttachmentConfiguration(reply, 'field_reply')"></el-switch>
+			<el-input style="margin-top: 20px;width: 200px;" v-if="reply" placeholder="请输入回复功能标题" v-model="replyTitle" clearable
+			 @change="addAttachmentConfiguration(replyTitle, 'field_replyTitle')"></el-input>
+		</div>
 		<!-- 搜索配置 -->
 		<div v-if="searchJudge==='yes'">
 			<h4>搜索配置</h4>
@@ -101,6 +108,8 @@
 		},
 		data() {
 			return {
+				replyTitle: '',
+				reply: false,
 				advocate: '',
 				pConfiguration: '',
 				aConfiguration: '',
