@@ -51,7 +51,7 @@
 				    <el-button @click="innerVisible = false">关 闭</el-button>
 				  </span>
 			</el-dialog>
-			<el-form :model="form" :rules="rules" ref="form" label-width="86px" v-loading="loading">
+			<el-form :model="form" :rules="rules" ref="form" label-width="110px" v-loading="loading">
 				<el-form-item label="图标类型" prop="iconType">
 					<el-radio-group v-model="form.iconType">
 						<el-radio label="1">自定义上传</el-radio>
@@ -90,6 +90,15 @@
 						<el-option v-for="item in listtypes" :key="item.value" :label="item.lable" :value="item.value">
 						</el-option>
 					</el-select>
+				</el-form-item>
+				<el-form-item v-if="form.list_type == 'list_img'" label="回复功能" prop="reply_status">
+					<el-radio-group v-model="form.reply_status">
+						<el-radio label="1">开启</el-radio>
+						<el-radio label="0">不开启</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item v-if="form.reply_status == '1' && form.list_type == 'list_img'" label="回复功能标题" prop="reply_title" style="width: 400px;">
+					<el-input v-model="form.reply_title" autocomplete="off" placeholder="请输入回复功能标题" clearable></el-input>
 				</el-form-item>
 				<el-form-item label="是否发布" prop="scope">
 					<el-radio-group v-model="form.scope">
@@ -159,7 +168,9 @@
 					app_sign: '',
 					app_detail: '',
 					custom_status: '',
-					custom_url: ''
+					custom_url: '',
+					reply_status: '',
+					reply_title: '',
 				},
 				rules: {
 					name: [{
@@ -192,6 +203,11 @@
 						message: '请选择是否项目应用',
 						trigger: 'change'
 					}],
+					reply_title: [{
+						required: true,
+						message: '请输入回复功能标题',
+						trigger: 'blur'
+					}]
 				},
 				options: [{
 					dict_label: "开工准备",
@@ -358,6 +374,8 @@
 					app_detail: '',
 					custom_status: "",
 					custom_url: "",
+					reply_status: '',
+					reply_title: '',
 				}
 				that.$set(that, 'form', obj);
 				that.$set(that, 'imageUrl', '');
@@ -388,6 +406,8 @@
 						app_project: data.data.app_project + "",
 						custom_status: data.data.custom_status + "",
 						custom_url: data.data.custom_url,
+						reply_status: data.data.reply_status ? data.data.reply_status+"" : '0',
+						reply_title: data.data.reply_title ? data.data.reply_title : '',
 					}
 					that.$set(that, 'form', obj);
 					that.$set(that, 'imageUrl', that.allUrl+'/' + data.data.app_style);
@@ -442,9 +462,11 @@
 				formData.append('app_sign', that.form.app_sign);
 				formData.append('icon_url', that.form.iconUrl);
 				formData.append('custom_status', that.form.custom_status);
-				formData.append('custom_url', that.form.custom_url);
+				that.form.custom_status == '1' && (formData.append('custom_url', that.form.custom_url));
+				that.form.list_type == 'list_img' && (formData.append('reply_status', that.form.reply_status));
+				(that.form.list_type == 'list_img' && that.form.reply_status == '1') && (formData.append('reply_title', that.form.reply_title));
 				that.loading = true;
-				// console.log(that.editor.txt.html())
+				// console.log(formData);
 				// return
 				Network.post('/admin/application/saveApp', formData).then(data => {
 					that.$message({
