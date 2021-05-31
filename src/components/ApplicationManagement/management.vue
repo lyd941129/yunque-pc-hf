@@ -8,7 +8,7 @@
 		<div v-for="(item, index) in isEnabled" v-show="item.child.length > 0" :key="index">
 			<h5>{{item.title}}</h5>
 			<div class="adhibition">
-				<div class="adhibition-box" v-for="(item_c, index_c) in item.child" :key="index_c" @mouseover="over('is', index_c, index)"
+				<div class="adhibition-box" v-for="(item_c, index_c) in item.child" :key="index_c" @mouseover="over('is', index_c, index, $event)"
 				 @mouseleave="leave('is', index_c, index)">
 					<img class="icon-img" v-if="item_c.app_style" :src="allUrl+'/'+item_c.app_style">
 					<i v-else class="icon" :class="item_c.icon_url"></i>
@@ -23,22 +23,25 @@
 				</div>
 			</div>
 		</div>
-		<h6>未发布</h6>
-		<div class="adhibition">
-			<div class="adhibition-box" v-for="(item, index) in noEnabled" :key="index" @mouseover="over('no', index)"
-			 @mouseleave="leave('no', index)">
-				<img class="icon-img" v-if="item.app_style" :src="allUrl+'/'+item.app_style">
-				<i v-else class="icon" :class="item.icon_url"></i>
-				<span>{{item.app_name}}</span>
-				<div class="operation">
-					<ul v-if="item.operation">
-						<li @click="adhibitionFun(item, 'formSet')">进入</li>
-						<li @click="seting(item.id)">设置</li>
-						<li @click="stopApp(item.id)">停用</li>
-					</ul>
+		<div :class="{'margin-b-93': noEnabled.length}" style="margin-bottom: 21px;">
+			<h6>未发布</h6>
+			<div class="adhibition">
+				<div class="adhibition-box" v-for="(item, index) in noEnabled" :key="index" @mouseover="over('no', index)"
+				 @mouseleave="leave('no', index)">
+					<img class="icon-img" v-if="item.app_style" :src="allUrl+'/'+item.app_style">
+					<i v-else class="icon" :class="item.icon_url"></i>
+					<span>{{item.app_name}}</span>
+					<div class="operation">
+						<ul v-if="item.operation">
+							<li @click="adhibitionFun(item, 'formSet')">进入</li>
+							<li @click="seting(item.id)">设置</li>
+							<li @click="stopApp(item.id)">停用</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
+		
 		<!-- 弹框 -->
 		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='80%' :destroy-on-close="true" top="10vh" @closed="closed">
 			<el-dialog width="400px" title="选择图标" :visible.sync="innerVisible" append-to-body class="icon-dialog">
@@ -293,6 +296,7 @@
 				}).then(data => {
 					that.$set(that, 'options', data.data.config.sys_app_group);
 					that.isEnabled = [];
+					that.noEnabled = [];
 					data.data.config.sys_app_group.length && data.data.config.sys_app_group.map((item) => {
 						let obj = {
 							title: item.dict_label,
@@ -312,7 +316,8 @@
 					that.loading = false;
 				});
 			},
-			over(type, index_c, index) { // 应用滑入显示操作栏
+			over(type, index_c, index, e) { // 应用滑入显示操作栏
+				console.log(e);
 				if (type === 'is') {
 					this.$set(this.isEnabled[index].child[index_c], 'operation', true);
 				} else {
@@ -550,6 +555,9 @@
 	// @import "../../../static/css/general.less";
 
 	.enterprise-box {
+		.margin-b-93{
+			margin-bottom: 87px !important;
+		}
 		.icon-box{
 			display: flex;
 			align-items: center;

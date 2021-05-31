@@ -109,6 +109,11 @@
 			<el-switch v-if="key === 'onlyPictures'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
 			<!-- 仅文档 -->
 			<el-switch v-if="key === 'onlyDocuments'" v-model="editData[key]" active-color="rgba(16, 179, 124, 1)"></el-switch>
+			<!-- 列表模式 -->
+			<el-radio-group v-if="key === 'pattern'" v-model="editData[key]">
+				<el-radio :label="'0'">模式一</el-radio>
+				<el-radio :label="'1'">模式二</el-radio>
+			</el-radio-group>
 		</div>
 		<!-- 关联字段弹框 -->
 		<el-dialog title="修改字段" :visible.sync="centerDialogVisibleDesign" append-to-body  v-loading="loadingDia">
@@ -244,6 +249,9 @@
 							break;
 						case "onlyDocuments":
 							title = '仅文档';
+							break;
+						case "pattern":
+							title = '列表模式';
 							break;
 					}
 					return title;

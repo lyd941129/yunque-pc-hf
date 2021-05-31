@@ -144,6 +144,7 @@ export default {
 		title: '列表组件',
 		paralanguage: '',// 问号里面显示的内容
 		id: '33',
+		pattern: '0',// 列表模式，0为默认，1为另一种
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		list: true,// 前端使用
