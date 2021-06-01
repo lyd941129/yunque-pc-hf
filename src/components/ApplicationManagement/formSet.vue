@@ -51,7 +51,7 @@
 		:page-size="pageSize" layout="sizes, total, prev, pager, next, jumper" :total="total">
 		</el-pagination>
 		<!-- 弹框 -->
-		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='530px'>
+		<el-dialog class="internal-scroll" :title="title" :visible.sync="centerDialogVisible" center width='530px'>
 			<el-form :model="form" :rules="rules" ref="form" label-width="110px">
 				<el-form-item label="表单名称" prop="name">
 					<el-input v-model="form.name" autocomplete="off" clearable></el-input>

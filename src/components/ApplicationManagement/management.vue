@@ -43,8 +43,8 @@
 		</div>
 		
 		<!-- 弹框 -->
-		<el-dialog :title="title" :visible.sync="centerDialogVisible" center width='80%' :destroy-on-close="true" top="10vh" @closed="closed">
-			<el-dialog width="400px" title="选择图标" :visible.sync="innerVisible" append-to-body class="icon-dialog">
+		<el-dialog class="internal-scroll" :lock-scroll="false" :title="title" :visible.sync="centerDialogVisible" center width='80%' :destroy-on-close="true" top="10vh" @closed="closed">
+			<el-dialog width="400px" title="选择图标" :visible.sync="innerVisible" append-to-body class="icon-dialog internal-scroll">
 				<div class="icon-div" v-for="(item, index) in arrIcon" :key="index" :class="{'active': item == form.iconUrl}" @click="selectIcon(item)">
 					<i class="icon" :class="item">
 						<i v-show="item == form.iconUrl" class="el-icon-circle-check"></i>
@@ -317,7 +317,7 @@
 				});
 			},
 			over(type, index_c, index, e) { // 应用滑入显示操作栏
-				console.log(e);
+				// console.log(e);
 				if (type === 'is') {
 					this.$set(this.isEnabled[index].child[index_c], 'operation', true);
 				} else {
@@ -509,7 +509,7 @@
 						Network.post('/admin/upload/file', formData).then(data => {
 							// console.log(data);
 							let str = 'http://yqadmin.taozizi.cn/'+data.data.url;
-							console.log(str);
+							// console.log(str);
 							insertImgFn(str);
 							// let arr = [];
 							// data.data.length && data.data.map((e) => {
@@ -713,4 +713,5 @@
 			}
 		}
 	}
+	
 </style>

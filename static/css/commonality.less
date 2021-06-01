@@ -40,6 +40,26 @@ ul{
 li{
 	list-style: none;
 }
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: #f8f8f8;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 16px;
+    background-color: #e8e8e8;
+}
+.internal-scroll{// 通用弹出框滚动条在内部而不在外部
+	overflow: hidden;
+	.el-dialog{
+		height: 80%;
+		overflow: hidden;
+		.el-dialog__body{
+			height: calc(100% - 160px);
+			overflow: auto;
+		}
+	}
+}
 .icon{
 	cursor: pointer;
 	display: inline-block;
