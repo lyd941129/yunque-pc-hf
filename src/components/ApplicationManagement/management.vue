@@ -273,6 +273,31 @@
 					"icon-timeplan",
 					"icon-card",
 					"icon-tower",
+					"icon-37",
+					"icon-38",
+					"icon-39",
+					"icon-40",
+					"icon-41",
+					"icon-42",
+					"icon-43",
+					"icon-44",
+					"icon-45",
+					"icon-46",
+					"icon-47",
+					"icon-48",
+					"icon-49",
+					"icon-50",
+					"icon-51",
+					"icon-52",
+					"icon-53",
+					"icon-54",
+					"icon-55",
+					"icon-56",
+					"icon-57",
+					"icon-58",
+					"icon-59",
+					"icon-60",
+					"icon-61",
 				],
 				config: {
 					UEDITOR_HOME_URL: '/ueditor/', // 需要令此处的URL等于对应 ueditor.config.js 中的配置。
@@ -555,6 +580,9 @@
 	// @import "../../../static/css/general.less";
 
 	.enterprise-box {
+		.icon{
+			transition: none !important;
+		}
 		.margin-b-93{
 			margin-bottom: 87px !important;
 		}
