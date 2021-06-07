@@ -317,7 +317,7 @@
 							"app_id": this.itemData.id,
 							"uid": that.loginData.user_info.id,
 							"table_name": this.form.name,
-							"table_tpl": '',
+							// "table_tpl": '',
 							"sn_prefix": this.form.prefix,
 							"installed": this.form.enable,
 							"is_default": this.form.is_default,
