@@ -114,16 +114,29 @@
 				<el-radio :label="'0'">模式一</el-radio>
 				<el-radio :label="'1'">模式二</el-radio>
 			</el-radio-group>
+			<!-- 后缀字符 -->
+			<el-input v-if="key === 'suffix'" maxlength="20" v-model="editData[key]" placeholder="请输后缀..."></el-input>
+			<!-- 绑定属性 -->
+			<el-select v-if="key === 'properties'" v-model="editData[key]" filterable placeholder="请选择">
+				<el-option v-for="item in formDesignData" :key="item.field_sign" :label="item.title" :value="item.field_sign">{{item.title}}</el-option>
+			</el-select>
 		</div>
 		<!-- 关联字段弹框 -->
 		<el-dialog title="修改字段" :visible.sync="centerDialogVisibleDesign" append-to-body  v-loading="loadingDia">
 			<el-checkbox-group v-model="checkList">
-				<el-checkbox v-for="(item, index) in checkOption" :key="item.field_sign || index" :label="item.field_sign || item.value" :value="item.field_sign || item.value">{{item.field_name || item.label}}</el-checkbox>
+				<el-checkbox v-for="(item, index) in checkOption" :key="item.field_sign || index" @change="detailsDetermine(item)"
+				:label="item.field_sign || item.value" :value="item.field_sign || item.value">{{item.field_name || item.label}}</el-checkbox>
 			</el-checkbox-group>
 			<h3 v-if="checkList.length && (editData.element === 'Think' || editData.element === 'Bringback')">入口</h3>
 			<el-radio-group v-model="radioList" v-if="checkList.length && (editData.element === 'Think' || editData.element === 'Bringback')">
 				<el-radio v-for="(item, index) in radioOption(checkOption, checkList)" :key="item.field_sign || index" :label="item.field_sign || item.value" :value="item.field_sign || item.value">{{item.field_name || item.label}}</el-radio>
 			</el-radio-group>
+			<h3 v-if="listParticulars.length && editData.element === 'Affiliated'">明细表</h3>
+			<el-checkbox-group v-model="checkListParticulars">
+				<el-checkbox v-for="(item, index) in listParticulars" :key="item.field_sign"
+				:label="item.field_sign" :value="item.field_sign">
+				{{item.title}}</el-checkbox>
+			</el-checkbox-group>
 			<span slot="footer" class="dialog-footer">
 				<el-button type="primary" @click="saveRelevance()">确 定</el-button>
 			</span>
@@ -135,8 +148,9 @@
 	import draggable from 'vuedraggable';	//导入draggable组件
 	import Network from '../../api/network.js';
 	export default{
-		mounted() {
+		created() {
 			// this.editData.element == 'Bringback' &&	this.getBringback();
+			console.log(this.formDesignData);
 		},
 		components: {
 			draggable,
@@ -166,6 +180,9 @@
 				loadingDia: false,
 				checkListrelevance: [],
 				radioList: [],
+				listParticulars: [],
+				checkListParticulars: [],
+				checkListParticularsCheck: '',
 			}
 		},
 		computed:{
@@ -253,6 +270,12 @@
 						case "pattern":
 							title = '列表模式';
 							break;
+						case "suffix":
+							title = '后缀';
+							break;
+						case "properties":
+							title = '绑定属性';
+							break;
 					}
 					return title;
 				}
@@ -267,6 +290,12 @@
 			}
 		},
 		methods:{
+			detailsDetermine(val){// 判断关联组件选择了明细，需要关联明细的表头
+				if(val.field_style === 'List' && this.editData.element === 'Affiliated' && this.checkList.indexOf(val.field_sign) != -1){
+					this.listParticulars = val.field_module.listData.header;
+					this.checkListParticularsCheck = val.field_sign;
+				}
+			},
 			seleChangeCode(){
 				// console.log(this.editData.code);
 			},
@@ -292,14 +321,16 @@
 				if(!that.isListEdit){
 					// 处理总数据里面的关系组件数据
 					that.formDesignData.map((f_item, f_index) => {
-						if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && id == f_item.id){
+						// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && id == f_item.id){
+						if(f_item.relevanceId == that.editData.id && id == f_item.id){
 							that.formDesignData.splice(f_index, 1);
 						}
 					});
 				}else{
 					// 处理总数据里面的关系组件数据
 					that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-						if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && id == f_item.id){
+						// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && id == f_item.id){
+						if(f_item.relevanceId == that.editData.id && id == f_item.id){
 							that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 						}
 					});
@@ -357,6 +388,8 @@
 						});
 						that.$set(that, 'checkList', arr);
 						that.$set(that, 'checkOption', []); 
+						that.$set(that, 'listParticulars', []); 
+						that.$set(that, 'checkListParticulars', []); 
 						Network.post('/admin/form/appSign', postObj).then(datas => {
 							that.$set(that, 'checkOption', datas.data);
 							that.loadingDia = false;
@@ -373,8 +406,14 @@
 				}
 				let that = this;
 				let objData = that.checkOption.filter(function(s){
-					return that.checkList.indexOf(s.field_sign || s.value) != -1;
+					return (that.checkList.indexOf(s.field_sign || s.value) != -1 && that.checkListParticularsCheck!=s.field_sign);
 				});
+				if(this.editData.element === 'Affiliated'){
+					let objDataList = that.listParticulars.filter(function(s){
+						return that.checkListParticulars.indexOf(s.field_sign) != -1;
+					});
+					objData = objData.concat(objDataList);
+				}
 				let objAfter = that.editData.relevance;
 				let arr = [];
 				objData.length && objData.map((item) => {// 处理入口组件
@@ -382,14 +421,15 @@
 						that.$set(that.editData, 'title', (item.field_name || item.label));
 						arr.push({
 							id: that.editData.id,
-							tit: item.field_name || item.label,
+							tit: item.field_name || item.label || item.title,
 							val: item.field_sign || item.value,
 						});
 					}else{
 						arr.push({
-							id: that.createid(),
-							tit: item.field_name || item.label,
+							id: that.editData.element === "Affiliated" ? (item.field_module ? item.field_module.id : item.id)  : that.createid(),
+							tit: item.field_name || item.label || item.title,
 							val: item.field_sign || item.value,
+							field_module: item.field_module ? item.field_module : (item.element ? item : '')
 						});
 					}
 				});
@@ -399,7 +439,8 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if(f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
@@ -425,6 +466,10 @@
 									});
 								}
 								break;
+							case "Affiliated":
+								item.field_module.relevanceId = that.editData.id;
+								that.formDesignData.push(item.field_module);
+								break;
 							default:
 								that.formDesignData.push({
 									element: "Binding",
@@ -439,7 +484,8 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
+							// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
+							if(f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});
@@ -465,6 +511,10 @@
 									});
 								}
 								break;
+							case "Affiliated":
+								item.field_module.relevanceId = that.editData.id;
+								that.formDesignData[that.listIndex].listData.header.push(item.field_module);
+								break;
 							default:
 								that.formDesignData[that.listIndex].listData.header.push({
 									element: "Binding",
@@ -488,7 +538,8 @@
 					// 处理总数据里面的关系组件数据
 					that.editData.relevance.length && that.editData.relevance.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if(f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
@@ -498,7 +549,8 @@
 					// 处理总数据里面的关系组件数据
 					that.editData.relevance.length && that.editData.relevance.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if(f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});
@@ -587,7 +639,8 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData.map((f_item, f_index) => {
-							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.id == f_item.id){
+							if(f_item.relevanceId == that.editData.id && item.id == f_item.id){
 								that.formDesignData.splice(f_index, 1);
 							}
 						});
@@ -596,7 +649,8 @@
 					// 处理总数据里面的关系组件数据
 					objAfter.length && objAfter.map((item) => {
 						that.formDesignData[that.listIndex].listData.header.map((f_item, f_index) => {
-							if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
+							// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
+							if(f_item.relevanceId == that.editData.id && item.field_sign == f_item.id){
 								that.formDesignData[that.listIndex].listData.header.splice(f_index, 1);
 							}
 						});

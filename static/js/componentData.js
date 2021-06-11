@@ -12,6 +12,7 @@ export default {
 		prompt: '请输入...',// 提示语
 		value: '',// 组件值
 		isSource: '',// 数据来源
+		suffix: '',// 后缀符号
 		paralanguage: '',// 问号里面显示的内容
 		fromId: '',// 来源id
 		isVerify: false,// 是否开启验证
@@ -181,5 +182,19 @@ export default {
 		status: '1',
 		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
 		isHidden: false,// 是否隐藏
-	}
+	},
+	Affiliated: {// 关联组件数据
+		element: 'Affiliated',// 关联组件
+		title: '关联组件',
+		prompt: '请选择...',// 提示语
+		paralanguage: '',// 问号里面显示的内容
+		id: 'lh1WGWXfyW',
+		properties: '',// 绑定属性
+		target: '',
+		relevance: [],
+		value: '',
+		status: '1',
+		isRequired: '0',// 是否必填‘0’：非必填；‘1’：必填
+		isHidden: false,// 是否隐藏
+	},
 };

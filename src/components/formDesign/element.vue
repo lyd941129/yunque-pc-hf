@@ -67,6 +67,10 @@
 			</div>
 			<div class="tip tip-list"><i class="el-icon-plus"></i>添加</div>
 		</div>
+		<div class="box choice-box" :class="{'box-isRequired': information.isRequired == '1'}" v-if="information.element === 'Affiliated'">
+			<div class="title" :class="{'no-write': information.status == '0'}">{{information.title}}<i v-if="information.paralanguage" class="el-icon-question"></i></div>
+			<div class="tip"><div></div><i class="el-icon-arrow-right"></i></div>
+		</div>
 	</div>
 </template>
 
@@ -130,10 +134,14 @@
 					this.getBringback();
 					this.postOrigin();
 				}
+				obj.element === 'Choice' && (this.postCode());
+				obj.element === 'Think' && (this.postTarget('think'));
+				(obj.element === 'Association' || obj.element === 'Affiliated') && (this.postTarget());
+				obj.element === 'Textbox' && (this.postOrigin());
 				// console.log(e);
 			},
 			openEditList(e){// 点击编辑
-				if(e.element === "Association"){
+				if(e.element === "Association" || e.element === "Affiliated"){
 					this.postTarget();
 				}else if(e.element === "Bringback"){
 					this.getBringback(e);
@@ -188,7 +196,8 @@
 				// 当删除关联表单组件要将关系里绑定的组件也去掉，不然数据会错乱
 				(itself.relevance && itself.relevance.length) && itself.relevance.map((item) => {
 					that.parentData.map((f_item, f_index) => {
-						if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == itself.id && item.id == f_item.id){
+						// if((f_item.element === "Textbox" || f_item.element === "Binding") && f_item.relevanceId == itself.id && item.id == f_item.id){
+						if(f_item.relevanceId == itself.id && item.id == f_item.id){
 							that.parentData.splice(f_index, 1);
 						}
 					});
@@ -224,7 +233,7 @@
 			},
 			moveRight(e){// 用于判断复杂组件是否在表格与非表格间拖动，是则不允许
 				let isDarggable = true;
-				if((e.draggedContext.element.element === "Bringback" || e.draggedContext.element.element === "Association") && e.from.parentNode.parentNode.parentNode.className === "box list-box" && e.to.parentNode.parentNode.parentNode.className === "phone"){
+				if((e.draggedContext.element.element === "Bringback" || e.draggedContext.element.element === "Association" || e.draggedContext.element.element === "Affiliated") && e.from.parentNode.parentNode.parentNode.className === "box list-box" && e.to.parentNode.parentNode.parentNode.className === "phone"){
 					isDarggable = false;
 				}
 				return isDarggable;

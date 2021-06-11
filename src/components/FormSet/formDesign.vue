@@ -185,6 +185,11 @@
 						title: '联想组件',
 						id: '14',
 						icon: 'icon icon-association'
+					},{
+						element: 'Affiliated',
+						title: '关联组件',
+						id: '15',
+						icon: 'icon icon-association'
 					},
 				],
 				titleText: {
@@ -202,6 +207,7 @@
 					'Bringback': '选择带回',
 					'Association': '表单关联',
 					'Think': '联想组件',
+					'Affiliated': '关联组件',
 				},
 				formDesignData: [],
 				selectId: -1,
@@ -257,7 +263,7 @@
 				this.$set(this, 'isListEdit', false);
 				obj.element === 'Choice' && (this.postCode());
 				obj.element === 'Think' && (this.postTarget('think'));
-				obj.element === 'Association' && (this.postTarget());
+				(obj.element === 'Association' || obj.element === 'Affiliated') && (this.postTarget());
 				obj.element === 'Textbox' && (this.postOrigin());
 				obj.element === 'Bringback' && (this.getBringback());
 				// console.log(e)
@@ -300,7 +306,7 @@
 			openEdit(e, i){// 编辑组件
 				e.element === 'Choice' && (this.postCode());
 				e.element === 'Think' && (this.postTarget('think'));
-				e.element === 'Association' && (this.postTarget());
+				(e.element === 'Association' || e.element === 'Affiliated') && (this.postTarget());
 				e.element === 'Textbox' && (this.postOrigin());
 				e.element === 'Bringback' && (this.getBringback(e));
 				this.$set(this, 'judge', true);
