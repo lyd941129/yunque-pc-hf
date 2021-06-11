@@ -408,12 +408,16 @@
 				let objData = that.checkOption.filter(function(s){
 					return (that.checkList.indexOf(s.field_sign || s.value) != -1 && that.checkListParticularsCheck!=s.field_sign);
 				});
-				if(this.editData.element === 'Affiliated'){
+				if(this.checkListParticularsCheck && this.editData.element === 'Affiliated' && that.checkList.indexOf(this.checkListParticularsCheck) != -1){
 					let objDataList = that.listParticulars.filter(function(s){
 						return that.checkListParticulars.indexOf(s.field_sign) != -1;
 					});
 					objData = objData.concat(objDataList);
+					that.$set(that.editData, 'link_table', this.checkListParticularsCheck);
+				}else{
+					that.$set(that.editData, 'link_table', '');
 				}
+				console.log(that.editData);
 				let objAfter = that.editData.relevance;
 				let arr = [];
 				objData.length && objData.map((item) => {// 处理入口组件
