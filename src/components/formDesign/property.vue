@@ -1,6 +1,7 @@
 <!-- 表单设计右边编辑展示 -->
 <template>
 	<div class="propertyElement" v-if="judge">
+		<slot></slot>
 		<div class="property-box" v-for="(item, key, index) in editData" :key="key+index">
 			<div class="title">{{titleFun(key)}} <span class="tip" v-show="key === 'title' || key === 'prompt'">最多20字</span></div>
 			<!-- 标题 -->
@@ -675,6 +676,7 @@
 		padding: 20px 15px;
 		box-sizing: border-box;
 		overflow: auto;
+		position: relative;
 		&::-webkit-scrollbar{
 			width: 4px;
 			height: 4px;
